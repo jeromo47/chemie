@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-white text-slate-800 font-sans;
+  }
+  h1, h2, h3, h4 {
+    @apply text-slate-900 font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-600;
+  }
+  .btn-primary {
+    @apply btn bg-brand-800 text-white hover:bg-brand-700;
+  }
+  .btn-outline {
+    @apply btn border border-slate-300 text-slate-800 hover:border-brand-700 hover:text-brand-800;
+  }
+  .section {
+    @apply py-16 md:py-20;
+  }
+  .container-tight {
+    @apply container max-w-6xl;
+  }
+  .prose-chemie {
+    @apply prose-slate max-w-none;
+  }
+}

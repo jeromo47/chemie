@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { Phone, Mail, MapPin, MessageCircle, Clock } from '@lucide/astro';
+
+const whatsapp = import.meta.env.PUBLIC_WHATSAPP_NUMBER ?? '34609662482';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Grupo Chemie',
+  url: 'https://grupochemie.com/contacto',
+  telephone: '+34609662482',
+  email: 'info@grupochemie.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Almería',
+    addressCountry: 'ES',
+  },
+  openingHours: 'Mo-Fr 09:00-18:00',
+};
+---
+<BaseLayout
+  title="Contacto · Grupo Chemie"
+  description="Contacta con Grupo Chemie: teléfono, email, WhatsApp y formulario para cooperativas y empresas en Almería."
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
+
+  <section class="section">
+    <div class="container-tight grid gap-12 lg:grid-cols-5">
+      <div class="lg:col-span-2">
+        <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Contacto</p>
+        <h1 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Hablemos</h1>
+        <p class="mt-4 text-slate-600">
+          Escríbenos por el canal que prefieras. Respondemos en horario comercial.
+        </p>
+
+        <ul class="mt-8 space-y-4 text-sm">
+          <li class="flex items-start gap-3">
+            <MapPin class="h-5 w-5 text-brand-700 mt-0.5" />
+            <div>
+              <p class="font-semibold text-slate-900">Dirección</p>
+              <p class="text-slate-600">Almería<br /><span class="text-slate-400">[Dirección completa — placeholder]</span></p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <Phone class="h-5 w-5 text-brand-700 mt-0.5" />
+            <div>
+              <p class="font-semibold text-slate-900">Teléfono</p>
+              <a href="tel:+34609662482" class="text-slate-600 hover:text-brand-800">609 662 482</a>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <MessageCircle class="h-5 w-5 text-brand-700 mt-0.5" />
+            <div>
+              <p class="font-semibold text-slate-900">WhatsApp</p>
+              <a
+                href={`https://wa.me/${whatsapp}`}
+                target="_blank"
+                rel="noopener"
+                class="text-slate-600 hover:text-brand-800"
+              >
+                Abrir chat de WhatsApp
+              </a>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <Mail class="h-5 w-5 text-brand-700 mt-0.5" />
+            <div>
+              <p class="font-semibold text-slate-900">Email</p>
+              <a href="mailto:info@grupochemie.com" class="text-slate-600 hover:text-brand-800">info@grupochemie.com</a>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <Clock class="h-5 w-5 text-brand-700 mt-0.5" />
+            <div>
+              <p class="font-semibold text-slate-900">Horario</p>
+              <p class="text-slate-600">Lunes a viernes · 09:00 — 18:00</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="lg:col-span-3">
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 md:p-8">
+          <h2 class="text-xl font-semibold">Formulario de contacto</h2>
+          <p class="mt-1 text-sm text-slate-600">Cuéntanos tu necesidad y nos ponemos en contacto.</p>
+          <div class="mt-6">
+            <ContactForm />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

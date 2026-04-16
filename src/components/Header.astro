@@ -1,0 +1,72 @@
+---
+import { Menu, X } from '@lucide/astro';
+
+const nav = [
+  { href: '/', label: 'Inicio' },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/productos', label: 'Productos' },
+  { href: '/cooperativas', label: 'Cooperativas' },
+  { href: '/sectores', label: 'Sectores' },
+];
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+  <div class="container-tight flex h-16 items-center justify-between">
+    <a href="/" class="flex items-center gap-2" aria-label="Grupo Chemie - Inicio">
+      <span class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-brand-800 text-white font-bold">C</span>
+      <span class="text-lg font-bold text-slate-900 tracking-tight">Grupo Chemie</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6" aria-label="Principal">
+      {nav.map(({ href, label }) => {
+        const active = pathname === href || (href !== '/' && pathname.startsWith(href));
+        return (
+          <a
+            href={href}
+            class:list={[
+              'text-sm font-medium transition-colors',
+              active ? 'text-brand-800' : 'text-slate-700 hover:text-brand-800',
+            ]}
+          >
+            {label}
+          </a>
+        );
+      })}
+      <a href="/contacto" class="btn-primary">Contacto</a>
+    </nav>
+
+    <button
+      id="nav-toggle"
+      class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-slate-700 hover:bg-slate-100"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <Menu class="h-6 w-6" data-icon="menu" />
+      <X class="h-6 w-6 hidden" data-icon="close" />
+    </button>
+  </div>
+
+  <div id="mobile-nav" class="md:hidden hidden border-t border-slate-200 bg-white">
+    <nav class="container-tight flex flex-col py-4 gap-1" aria-label="Móvil">
+      {nav.map(({ href, label }) => (
+        <a href={href} class="py-2 text-slate-700 hover:text-brand-800 font-medium">{label}</a>
+      ))}
+      <a href="/contacto" class="btn-primary mt-2 self-start">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('nav-toggle');
+  const panel = document.getElementById('mobile-nav');
+  const menuIcon = btn?.querySelector('[data-icon="menu"]');
+  const closeIcon = btn?.querySelector('[data-icon="close"]');
+  btn?.addEventListener('click', () => {
+    const open = panel?.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+    menuIcon?.classList.toggle('hidden', open);
+    closeIcon?.classList.toggle('hidden', !open);
+  });
+</script>

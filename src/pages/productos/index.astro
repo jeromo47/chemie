@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+
+const all = await getCollection('products');
+const productos = all.sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99));
+
+const familias = [...new Set(productos.map((p) => p.data.familia))].sort();
+const porFamilia = familias.map((familia) => ({
+  familia,
+  items: productos.filter((p) => p.data.familia === familia),
+}));
+---
+<BaseLayout
+  title="Catálogo de productos · Grupo Chemie"
+  description="Catálogo de productos químicos y suministros industriales: biocidas registrados, detergencia, EPIs y consumibles para cooperativas y empresas."
+>
+  <section class="section">
+    <div class="container-tight">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Catálogo</p>
+      <h1 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Productos</h1>
+      <p class="mt-4 text-slate-600 max-w-2xl">
+        Selección organizada por familias. Para presupuestos, fichas técnicas o cantidades personalizadas contacta con el equipo comercial.
+      </p>
+
+      {familias.length > 1 && (
+        <nav class="mt-8 flex flex-wrap gap-2 text-sm" aria-label="Familias de producto">
+          {familias.map((f) => (
+            <a href={`#${encodeURIComponent(f)}`} class="rounded-full border border-slate-200 px-3 py-1 text-slate-600 hover:border-brand-700 hover:text-brand-800">
+              {f}
+            </a>
+          ))}
+        </nav>
+      )}
+
+      <div class="mt-12 space-y-16">
+        {porFamilia.map(({ familia, items }) => (
+          <section id={encodeURIComponent(familia)} class="scroll-mt-24">
+            <h2 class="text-xl md:text-2xl font-bold">{familia}</h2>
+            <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((p) => <ProductCard product={p} />)}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      {productos.length === 0 && (
+        <p class="mt-10 text-slate-500">El catálogo está en preparación. Pronto añadiremos productos.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import { FileText } from '@lucide/astro';
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  product: CollectionEntry<'products'>;
+}
+const { product } = Astro.props;
+const { nombre, ref, familia, descripcion, imagen, registroBiocida } = product.data;
+---
+<a
+  href={`/productos/${product.slug}`}
+  class="group flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition-shadow hover:shadow-md"
+>
+  <div class="aspect-[4/3] w-full bg-slate-100 flex items-center justify-center overflow-hidden">
+    {imagen ? (
+      <Image
+        src={imagen}
+        alt={nombre}
+        width={600}
+        height={450}
+        class="h-full w-full object-cover transition-transform group-hover:scale-105"
+      />
+    ) : (
+      <FileText class="h-12 w-12 text-slate-300" />
+    )}
+  </div>
+  <div class="flex flex-col gap-2 p-4">
+    <p class="text-xs font-medium uppercase tracking-wide text-brand-700">{familia}</p>
+    <h3 class="text-base font-semibold text-slate-900 group-hover:text-brand-800">{nombre}</h3>
+    <p class="text-xs text-slate-500">Ref. {ref}</p>
+    <p class="text-sm text-slate-600 line-clamp-2">{descripcion}</p>
+    {registroBiocida && (
+      <span class="mt-1 inline-flex w-fit rounded bg-brand-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-800 border border-brand-100">
+        Biocida {registroBiocida}
+      </span>
+    )}
+  </div>
+</a>

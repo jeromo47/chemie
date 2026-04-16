@@ -1,0 +1,100 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { ShieldCheck, FileDown, ArrowLeft, Package, Wrench } from '@lucide/astro';
+
+export async function getStaticPaths() {
+  const productos = await getCollection('products');
+  return productos.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await product.render();
+const {
+  nombre,
+  ref,
+  familia,
+  descripcion,
+  usos,
+  presentaciones,
+  registroBiocida,
+  imagen,
+  fichaPDF,
+} = product.data;
+---
+<BaseLayout
+  title={`${nombre} · Grupo Chemie`}
+  description={descripcion}
+  type="article"
+>
+  <section class="section">
+    <div class="container-tight">
+      <a href="/productos" class="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-brand-800">
+        <ArrowLeft class="h-4 w-4" /> Volver al catálogo
+      </a>
+
+      <div class="mt-6 grid gap-10 lg:grid-cols-2 lg:items-start">
+        <div class="aspect-square w-full rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden">
+          {imagen ? (
+            <Image src={imagen} alt={nombre} width={900} height={900} class="h-full w-full object-cover" />
+          ) : (
+            <Package class="h-20 w-20 text-slate-300" />
+          )}
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{familia}</p>
+          <h1 class="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight">{nombre}</h1>
+          <p class="mt-2 text-sm text-slate-500">Ref. {ref}</p>
+          <p class="mt-5 text-slate-700">{descripcion}</p>
+
+          {registroBiocida && (
+            <div class="mt-5 inline-flex items-center gap-2 rounded-md bg-brand-50 border border-brand-100 px-3 py-2 text-sm text-brand-800">
+              <ShieldCheck class="h-4 w-4" />
+              <span>Registro Oficial de Biocidas <strong>{registroBiocida}</strong></span>
+            </div>
+          )}
+
+          {presentaciones.length > 0 && (
+            <div class="mt-6">
+              <h2 class="text-sm font-semibold text-slate-900">Presentaciones</h2>
+              <ul class="mt-2 flex flex-wrap gap-2">
+                {presentaciones.map((p) => (
+                  <li class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">{p}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {usos.length > 0 && (
+            <div class="mt-6">
+              <h2 class="text-sm font-semibold text-slate-900">Usos recomendados</h2>
+              <ul class="mt-2 space-y-1 text-sm text-slate-700">
+                {usos.map((u) => (
+                  <li class="flex items-start gap-2"><Wrench class="h-4 w-4 mt-0.5 text-brand-700" />{u}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="/contacto" class="btn-primary">Solicitar presupuesto</a>
+            {fichaPDF && (
+              <a href={fichaPDF} class="btn-outline" target="_blank" rel="noopener">
+                <FileDown class="h-4 w-4" /> Descargar ficha PDF
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <article class="prose prose-slate max-w-3xl mt-16">
+        <Content />
+      </article>
+    </div>
+  </section>
+</BaseLayout>

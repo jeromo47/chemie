@@ -4,75 +4,256 @@ import {
   Sprout,
   Droplets,
   ShieldCheck,
-  Truck,
+  HandPlatter,
+  Cog,
+  Snowflake,
+  Leaf,
   CircleCheck,
   ArrowRight,
+  CalendarCheck,
+  MessageCircle,
 } from '@lucide/astro';
 import { site } from '../config/site';
+
+const aplicaciones = [
+  {
+    id: 'agua-lavado',
+    icon: Droplets,
+    titulo: 'Agua de lavado e hidrocoolers',
+    intro:
+      'Control microbiológico y prevención de contaminación cruzada en túneles, balsas y circuitos de recirculación.',
+    productos: [
+      { ref: 'AD-01', nombre: 'Aliclor Complet', desc: 'Detergente clorado fungicida-bactericida', slug: 'ad-01-aliclor-complet' },
+      { ref: 'AD-03', nombre: 'Tunelimp CL', desc: 'Detergente clorado para túneles de lavado', slug: 'ad-03-tunelimp-cl' },
+      { ref: 'AD-04', nombre: 'Tunelimp', desc: 'Detergente para túneles de lavado', slug: 'ad-04-tunelimp' },
+      { ref: 'AA-03', nombre: 'Oxisan', desc: 'Oxigenado para evitar contaminación cruzada', slug: 'aa-03-oxisan' },
+      { ref: 'AA-01', nombre: 'TR-20', desc: 'Aditivo especial para aguas de lavado', slug: 'aa-01-tr-20' },
+    ],
+  },
+  {
+    id: 'tratamiento-fruta',
+    icon: Leaf,
+    titulo: 'Tratamiento de fruta y hortaliza',
+    intro:
+      'Acabado de producto en línea para mejorar presentación y conservación sin comprometer la seguridad alimentaria.',
+    productos: [
+      { ref: 'AA-02', nombre: 'Hidrobrill', desc: 'Secante abrillantador de verduras y hortalizas', slug: 'aa-02-hidrobrill' },
+      { ref: 'AA-04', nombre: 'Aceite de Vaselina V.80', desc: 'Aceite medicinal ligero', slug: 'aa-04-aceite-de-vaselina-medicinal-v80' },
+    ],
+  },
+  {
+    id: 'lineas-calibradoras',
+    icon: Cog,
+    titulo: 'Líneas, cintas y calibradoras',
+    intro:
+      'Detergencia higienizante para cintas, rodillos, calibradores y equipos en contacto con producto.',
+    productos: [
+      { ref: 'ID-01', nombre: 'Activ-Color', desc: 'Detergente higienizante clorado para superficies', slug: 'id-01-activ-color' },
+      { ref: 'AD-02', nombre: 'Bacter Chem', desc: 'Detergente higienizante', slug: 'ad-02-bacter-chem' },
+      { ref: 'ID-02', nombre: 'Zosy D', desc: 'Desengrasante industrial apto industria alimentaria', slug: 'id-02-zosy-d' },
+      { ref: 'ID-03', nombre: 'Chemgras DS', desc: 'Desengrasante multiusos apto industria alimentaria', slug: 'id-03-chemgras-ds' },
+    ],
+  },
+  {
+    id: 'higiene-personal',
+    icon: HandPlatter,
+    titulo: 'Higiene del personal manipulador',
+    intro:
+      'Lavado de manos sin residuo, hidroalcohólicos y dispensación en puntos de acceso a sala.',
+    productos: [
+      { ref: 'AM-03', nombre: 'Dergel SO', desc: 'Gel lavado de manos sin residuo, especial alimentaria', slug: 'am-03-dergel-so' },
+      { ref: 'AM-07', nombre: 'Hidrosan', desc: 'Higienizante hidroalcohólico para manos', slug: 'am-07-hidrosan' },
+      { ref: 'AM-06', nombre: 'Licogel', desc: 'Gel sanitizante hidroalcohólico uso directo', slug: 'am-06-licogel' },
+      { ref: 'AM-04', nombre: 'Deter-Past', desc: 'Pasta de manos exenta de disolventes', slug: 'am-04-deter-past' },
+    ],
+  },
+  {
+    id: 'camaras-suelos',
+    icon: Snowflake,
+    titulo: 'Cámaras, muelles y suelos',
+    intro:
+      'Limpieza y mantenimiento de cámaras de frío, muelles de expedición y pavimentos industriales.',
+    productos: [
+      { ref: 'ID-05', nombre: 'Chemgras BAC', desc: 'Desengrasante higienizante-sanitizante', slug: 'id-05-chemgras-bac' },
+      { ref: 'ID-10', nombre: 'Brinet L', desc: 'Fregasuelos higienizante perfumado', slug: 'id-10-brinet-l' },
+      { ref: 'ID-11', nombre: 'Brinet MG', desc: 'Fregasuelos para máquinas automáticas', slug: 'id-11-brinet-mg' },
+    ],
+  },
+  {
+    id: 'biocidas',
+    icon: ShieldCheck,
+    titulo: 'Biocidas con registro oficial',
+    intro: `Producto biocida autorizado (Registro Oficial ${site.registroBiocidas}) para superficies en contacto con alimentos tras aclarado.`,
+    productos: [
+      { ref: 'AD-01', nombre: 'Aliclor Complet', desc: 'Detergente clorado fungicida-bactericida', slug: 'ad-01-aliclor-complet' },
+      { ref: 'AD-02', nombre: 'Bacter Chem', desc: 'Detergente higienizante', slug: 'ad-02-bacter-chem' },
+      { ref: 'AD-03', nombre: 'Tunelimp CL', desc: 'Detergente clorado para túneles de lavado', slug: 'ad-03-tunelimp-cl' },
+    ],
+  },
+];
+
+const checklist = [
+  'Revisión de productos activos por línea y campaña anterior',
+  'Dosificaciones y puntos de dispensación recomendados',
+  'Compatibilidad con superficies en contacto con alimentos',
+  'Stock y plazos de entrega durante pico de campaña',
+  'Fichas técnicas y de seguridad actualizadas',
+];
+
+const waMsg = encodeURIComponent(
+  'Hola, soy responsable de una cooperativa y quiero preparar la campaña con Grupo Chemie.',
+);
+const waLink = `https://wa.me/${site.whatsapp.number}?text=${waMsg}`;
 ---
 <BaseLayout
-  title={`Cooperativas y manipulado · ${site.name}`}
-  description="Productos técnicos para cooperativas y centros de manipulado: higiene de manos, detergencia clorada, biocidas y aditivos para aguas de lavado."
+  title={`Cooperativas y manipulado hortofrutícola · ${site.name}`}
+  description="Producto técnico para cooperativas y centros de manipulado hortofrutícola en Almería: aguas de lavado, tratamiento de fruta, higiene del personal, limpieza de líneas y biocidas con registro oficial."
 >
+  <!-- HERO -->
   <section class="border-b border-line bg-surface-soft">
-    <div class="container-tight section grid gap-10 lg:grid-cols-2 lg:items-center">
+    <div class="container-tight section grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center">
       <div>
         <span class="badge-brand">
-          <Sprout class="h-3.5 w-3.5" /> Cooperativas y manipulado
+          <Sprout class="h-3.5 w-3.5" /> Manipulado hortofrutícola · Almería
         </span>
         <h1 class="mt-5 text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
-          Producto técnico para <span class="text-brand-600">cooperativas y centros de manipulado</span>
+          Producto técnico para <span class="text-brand-600">cooperativas y centros de manipulado</span> hortofrutícola
         </h1>
-        <p class="mt-5 text-lg text-muted max-w-xl">
-          Detergentes clorados, biocidas, higiene de manos y aditivos para aguas de lavado. Cumplimiento normativo en industria alimentaria y suministro continuado en campaña.
+        <p class="mt-6 text-lg text-muted max-w-xl">
+          Aguas de lavado, tratamiento de fruta, limpieza de líneas, higiene del personal, cámaras y biocidas con Registro Oficial. Suministro continuado durante campaña.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/contacto" class="btn-primary">Solicitar visita comercial <ArrowRight class="h-4 w-4" /></a>
-          <a href="/productos?cp=industria-alimentaria" class="btn-outline">Ver productos</a>
+          <a href="/contacto?sector=cooperativa" class="btn-primary">
+            Solicitar visita técnica <ArrowRight class="h-4 w-4" />
+          </a>
+          <a href={waLink} target="_blank" rel="noopener noreferrer" class="btn-outline">
+            <MessageCircle class="h-4 w-4" /> WhatsApp directo
+          </a>
         </div>
+        <p class="mt-4 text-xs text-muted">
+          Atendemos principalmente Poniente almeriense, Campo de Níjar, Bajo Andarax y comarcas limítrofes.
+        </p>
       </div>
-      <div class="card p-6">
-        <h2 class="text-lg font-semibold text-ink">Argumentos técnicos</h2>
-        <ul class="mt-4 space-y-3 text-sm text-muted">
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Biocidas con Registro Oficial ({site.registroBiocidas}).</li>
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Productos compatibles con superficies en contacto con alimentos.</li>
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Higiene de manos específica para industria alimentaria.</li>
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Suministro continuado en campaña.</li>
+
+      <div class="card p-6 lg:p-8">
+        <div class="flex items-center gap-2 text-xs uppercase tracking-wider text-muted">
+          <ShieldCheck class="h-4 w-4 text-brand-500" /> Registro Oficial de Biocidas
+        </div>
+        <p class="mt-2 text-2xl md:text-3xl font-black text-brand-600 tracking-tight">
+          {site.registroBiocidas}
+        </p>
+        <p class="mt-3 text-sm text-muted">
+          Autorización oficial para comercialización y aplicación de biocidas de uso profesional en industria alimentaria.
+        </p>
+        <ul class="mt-5 space-y-2 text-sm text-ink">
+          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Compatible con superficies en contacto con alimentos (tras aclarado).</li>
+          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Ficha técnica y de seguridad disponibles.</li>
+          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Dosificación adaptada a cada instalación.</li>
         </ul>
       </div>
     </div>
   </section>
 
+  <!-- APLICACIONES -->
   <section class="section">
     <div class="container-tight">
-      <h2 class="text-2xl md:text-3xl font-bold text-ink tracking-tight">Soluciones por aplicación</h2>
-      <div class="mt-8 grid gap-5 md:grid-cols-3">
-        <div class="card p-6">
-          <Droplets class="h-7 w-7 text-brand-500" stroke-width={1.6} />
-          <h3 class="mt-3 font-semibold text-ink">Detergencia y túneles de lavado</h3>
-          <p class="mt-1 text-sm text-muted">Clorados y no clorados para túneles de lavado y líneas de envasado.</p>
-        </div>
-        <div class="card p-6">
-          <ShieldCheck class="h-7 w-7 text-brand-500" stroke-width={1.6} />
-          <h3 class="mt-3 font-semibold text-ink">Higiene y biocidas</h3>
-          <p class="mt-1 text-sm text-muted">Detergentes higienizantes y biocidas con registro oficial.</p>
-        </div>
-        <div class="card p-6">
-          <Truck class="h-7 w-7 text-brand-500" stroke-width={1.6} />
-          <h3 class="mt-3 font-semibold text-ink">Aguas de lavado</h3>
-          <p class="mt-1 text-sm text-muted">Aditivos, secantes y producto oxigenado para evitar contaminación cruzada.</p>
-        </div>
+      <div class="max-w-3xl">
+        <p class="label-muted">Aplicaciones</p>
+        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
+          Qué cubrimos dentro del almacén de manipulado
+        </h2>
+        <p class="mt-3 text-muted">
+          Producto por aplicación, con referencia directa a catálogo. Para dosificaciones y fichas técnicas, el equipo técnico te acompaña en planta.
+        </p>
+      </div>
+
+      <div class="mt-12 space-y-12">
+        {aplicaciones.map((app) => {
+          const Icon = app.icon;
+          return (
+            <article id={app.id} class="grid gap-6 md:grid-cols-[240px_1fr] md:gap-10">
+              <div class="md:sticky md:top-28 md:self-start">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+                  <Icon class="h-6 w-6" stroke-width={1.6} />
+                </div>
+                <h3 class="mt-4 text-xl font-bold text-ink tracking-tight">{app.titulo}</h3>
+                <p class="mt-2 text-sm text-muted">{app.intro}</p>
+              </div>
+              <div class="grid gap-3 sm:grid-cols-2">
+                {app.productos.map((p) => (
+                  <a
+                    href={`/productos/${p.slug}`}
+                    class="card-hover p-4 flex flex-col"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-mono uppercase tracking-wider text-muted">{p.ref}</span>
+                      <ArrowRight class="h-3.5 w-3.5 text-brand-500" />
+                    </div>
+                    <p class="mt-2 font-semibold text-ink leading-snug">{p.nombre}</p>
+                    <p class="mt-1 text-sm text-muted">{p.desc}</p>
+                  </a>
+                ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
 
-  <section class="section bg-ink text-white">
-    <div class="container-tight text-center">
-      <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Prepara tu próxima campaña</h2>
-      <p class="mt-3 text-white/70 max-w-2xl mx-auto">
-        Hablamos con el responsable de calidad o mantenimiento de tu cooperativa y te proponemos un plan adaptado.
-      </p>
-      <a href="/contacto" class="btn bg-brand-500 text-white hover:bg-brand-600 mt-6">Contactar ahora</a>
+  <!-- CHECKLIST / PREPARACIÓN DE CAMPAÑA -->
+  <section class="section bg-surface-soft border-t border-line">
+    <div class="container-tight grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+      <div>
+        <p class="label-muted">Preparación de campaña</p>
+        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
+          Revisión antes de arrancar
+        </h2>
+        <p class="mt-4 text-muted">
+          Una revisión sencilla con el responsable de calidad o de mantenimiento evita incidencias durante campaña y ajusta consumos.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/contacto?sector=cooperativa" class="btn-primary">
+            <CalendarCheck class="h-4 w-4" /> Agendar revisión
+          </a>
+          <a href="/productos?cp=industria-alimentaria" class="btn-outline">
+            Ver gama alimentaria
+          </a>
+        </div>
+      </div>
+      <ul class="space-y-3">
+        {checklist.map((item) => (
+          <li class="card p-4 flex items-start gap-3">
+            <CircleCheck class="h-5 w-5 mt-0.5 text-brand-500 flex-shrink-0" />
+            <span class="text-sm text-ink">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="section">
+    <div class="container-tight">
+      <div class="rounded-2xl bg-ink text-white p-8 md:p-14 grid gap-6 md:grid-cols-[1.3fr_1fr] md:items-center">
+        <div>
+          <p class="text-brand-400 text-xs font-semibold uppercase tracking-wider">Contacto técnico</p>
+          <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white tracking-tight">
+            Prepara la próxima campaña con soporte en planta
+          </h2>
+          <p class="mt-4 text-white/70 max-w-xl">
+            Hablamos con el responsable de calidad o mantenimiento, revisamos instalación, productos y dosificaciones, y proponemos un plan adaptado a tu cooperativa.
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row md:flex-col gap-3">
+          <a href="/contacto?sector=cooperativa" class="btn bg-brand-500 text-white hover:bg-brand-600">
+            Escribir al equipo
+          </a>
+          <a href={`tel:${site.phone.tel}`} class="btn border border-white/20 text-white hover:bg-white/10">
+            {site.phone.display}
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>

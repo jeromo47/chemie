@@ -1,6 +1,23 @@
 ---
 const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
 
+// Preselección desde querystring (p.ej. /contacto?sector=cooperativa)
+const sectorParam = (Astro.url.searchParams.get('sector') ?? '').toLowerCase();
+const sectorPreset =
+  sectorParam === 'cooperativa' || sectorParam === 'cooperativas'
+    ? 'Cooperativa / manipulado'
+    : sectorParam === 'alimentaria'
+      ? 'Industria alimentaria'
+      : sectorParam === 'hosteleria'
+        ? 'Hostelería / colectividades'
+        : sectorParam === 'taller' || sectorParam === 'automocion'
+          ? 'Taller / automoción'
+          : sectorParam === 'construccion'
+            ? 'Construcción'
+            : sectorParam === 'mantenimiento'
+              ? 'Mantenimiento industrial'
+              : '';
+
 const inputClass =
   'mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500';
 ---
@@ -32,12 +49,12 @@ const inputClass =
       <span class="text-sm font-medium text-ink">Sector</span>
       <select name="sector" class={inputClass}>
         <option value="">Selecciona un sector</option>
-        <option>Industria alimentaria</option>
-        <option>Cooperativa / manipulado</option>
-        <option>Hostelería / colectividades</option>
-        <option>Taller / automoción</option>
-        <option>Construcción</option>
-        <option>Mantenimiento industrial</option>
+        <option selected={sectorPreset === 'Cooperativa / manipulado'}>Cooperativa / manipulado</option>
+        <option selected={sectorPreset === 'Industria alimentaria'}>Industria alimentaria</option>
+        <option selected={sectorPreset === 'Hostelería / colectividades'}>Hostelería / colectividades</option>
+        <option selected={sectorPreset === 'Taller / automoción'}>Taller / automoción</option>
+        <option selected={sectorPreset === 'Construcción'}>Construcción</option>
+        <option selected={sectorPreset === 'Mantenimiento industrial'}>Mantenimiento industrial</option>
         <option>Otro</option>
       </select>
     </label>

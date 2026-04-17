@@ -4,7 +4,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import {
   ShieldCheck,
   ArrowRight,
-  FlaskConical,
   Droplets,
   HandPlatter,
   Wrench,
@@ -13,6 +12,10 @@ import {
   Factory,
   Leaf,
   PackageSearch,
+  Sprout,
+  Cog,
+  Snowflake,
+  FlaskConical,
 } from '@lucide/astro';
 import { site, categoriasPadre } from '../config/site';
 
@@ -23,58 +26,72 @@ const conteoPadre = Object.fromEntries(
   categoriasPadre.map((cp) => [cp, productos.filter((p) => p.data.categoriaPadre === cp).length]),
 );
 
-const categoriasHome = [
+// Sectores ordenados por peso real de negocio: manipulado hortofrutícola al frente.
+const sectoresHome = [
   {
-    titulo: 'Detergentes y desengrasantes',
-    desc: 'Detergencia técnica, desengrasantes multiusos y fregasuelos para entornos profesionales.',
-    icon: Droplets,
-    href: '/productos?cat=Detergentes+y+desengrasantes',
+    icon: Sprout,
+    title: 'Cooperativas y manipulado hortofrutícola',
+    desc: 'Agua de lavado, tratamiento de fruta, higiene del personal y biocidas para campaña.',
+    href: '/cooperativas',
+    cta: 'Ver soluciones',
+    feature: true,
   },
   {
-    titulo: 'Higiene de manos',
-    desc: 'Geles, pastas, hidroalcohólicos y productos específicos para industria alimentaria.',
-    icon: HandPlatter,
-    href: '/productos?cat=Higiene+de+manos',
+    icon: PackageSearch,
+    title: 'Industria alimentaria de proceso',
+    desc: 'Detergentes clorados, limpieza de líneas y producto food-grade (aceite medicinal V.80, desmoldantes).',
+    href: '/productos?cp=industria-alimentaria',
+    cta: 'Ver gama alimentaria',
+    feature: true,
   },
   {
-    titulo: 'Talleres, mantenimiento y automoción',
-    desc: 'Aflojatodo, descarbonizantes, lubricantes PTFE y limpieza de equipos eléctricos.',
-    icon: Wrench,
-    href: '/productos?cat=Talleres%2C+mantenimiento+y+automoci%C3%B3n',
-  },
-  {
-    titulo: 'Hostelería',
-    desc: 'Lavavajillas, abrillantadores, limpiacristales, ambientadores y desincrustantes.',
     icon: ChefHat,
+    title: 'Hostelería y colectividades',
+    desc: 'Lavavajillas, abrillantadores, desincrustantes y limpieza técnica de cocinas.',
     href: '/productos?cat=Hosteler%C3%ADa',
+    cta: 'Ver productos',
   },
   {
-    titulo: 'Construcción y pinturas',
-    desc: 'Selladoras epoxi, revestimientos autonivelantes y aditivos para hormigón.',
+    icon: Wrench,
+    title: 'Talleres, mantenimiento y automoción',
+    desc: 'Aflojatodo, descarbonizantes, lubricantes PTFE y limpieza de equipos eléctricos.',
+    href: '/productos?cat=Talleres%2C+mantenimiento+y+automoci%C3%B3n',
+    cta: 'Ver productos',
+  },
+  {
     icon: HardHat,
+    title: 'Construcción y pavimentos industriales',
+    desc: 'Selladoras epoxi, revestimientos autonivelantes y aditivos para hormigón.',
     href: '/productos?cat=Construcci%C3%B3n+y+pinturas',
+    cta: 'Ver productos',
   },
   {
-    titulo: 'Detergentes, desengrasantes y biocidas',
-    desc: 'Detergentes clorados y limpieza técnica para industria alimentaria.',
-    icon: ShieldCheck,
-    href: '/productos?cat=Detergentes%2C+desengrasantes+y+biocidas',
-  },
-  {
-    titulo: 'Aditivos e higienizantes especiales',
-    desc: 'Aditivos para aguas de lavado, secantes para fruta y producto oxigenado.',
-    icon: FlaskConical,
-    href: '/productos?cat=Aditivos+e+higienizantes+especiales',
+    icon: Factory,
+    title: 'Industria en general',
+    desc: 'Detergencia técnica, higiene de manos y desengrasantes aptos industria alimentaria.',
+    href: '/productos?cp=industria-en-general',
+    cta: 'Ver productos',
   },
 ];
 
-const sectoresHome = [
-  { icon: Factory, title: 'Industria en general', desc: 'Limpieza técnica, higiene y mantenimiento profesional.' },
-  { icon: ChefHat, title: 'Hostelería y colectividades', desc: 'Lavavajillas, abrillantadores y desincrustantes.' },
-  { icon: PackageSearch, title: 'Industria alimentaria', desc: 'Detergentes clorados, biocidas y aditivos específicos.' },
-  { icon: Wrench, title: 'Talleres y automoción', desc: 'Desengrasantes, lubricantes y desbloqueantes.' },
-  { icon: HardHat, title: 'Construcción y pavimentos', desc: 'Epoxi, selladoras y aditivos para hormigón.' },
-  { icon: Leaf, title: 'Línea ecológica', desc: 'Alternativas con menor impacto para entornos sensibles.' },
+// Aplicaciones destacadas de cooperativas con producto real
+const aplicacionesCooperativa = [
+  { icon: Droplets, titulo: 'Aguas de lavado', desc: 'Aliclor Complet, Tunelimp CL, Oxisan, TR-20.', href: '/cooperativas#agua-lavado' },
+  { icon: Leaf, titulo: 'Tratamiento de fruta', desc: 'Hidrobrill secante, aceite V.80.', href: '/cooperativas#tratamiento-fruta' },
+  { icon: Cog, titulo: 'Líneas y calibradoras', desc: 'Activ-Color, Bacter Chem, Zosy D.', href: '/cooperativas#lineas-calibradoras' },
+  { icon: HandPlatter, titulo: 'Higiene del personal', desc: 'Dergel SO, Hidrosan, Licogel, Deter-Past.', href: '/cooperativas#higiene-personal' },
+  { icon: Snowflake, titulo: 'Cámaras y suelos', desc: 'Chemgras BAC, Brinet L, Brinet MG.', href: '/cooperativas#camaras-suelos' },
+  { icon: ShieldCheck, titulo: 'Biocidas con registro', desc: `Autorización ${site.registroBiocidas}.`, href: '/cooperativas#biocidas' },
+];
+
+const categoriasHome = [
+  { titulo: 'Detergentes, desengrasantes y biocidas', desc: 'Clorados y limpieza técnica para industria alimentaria.', icon: ShieldCheck, href: '/productos?cat=Detergentes%2C+desengrasantes+y+biocidas' },
+  { titulo: 'Aditivos e higienizantes especiales', desc: 'Aguas de lavado, secantes y producto oxigenado.', icon: FlaskConical, href: '/productos?cat=Aditivos+e+higienizantes+especiales' },
+  { titulo: 'Higiene de manos', desc: 'Gel sin residuo para alimentaria, hidroalcohólicos y pastas.', icon: HandPlatter, href: '/productos?cat=Higiene+de+manos' },
+  { titulo: 'Detergentes y desengrasantes', desc: 'Detergencia técnica, desengrasantes multiusos y fregasuelos.', icon: Droplets, href: '/productos?cat=Detergentes+y+desengrasantes' },
+  { titulo: 'Talleres, mantenimiento y automoción', desc: 'Aflojatodo, descarbonizantes, lubricantes PTFE.', icon: Wrench, href: '/productos?cat=Talleres%2C+mantenimiento+y+automoci%C3%B3n' },
+  { titulo: 'Hostelería', desc: 'Lavavajillas, abrillantadores y desincrustantes.', icon: ChefHat, href: '/productos?cat=Hosteler%C3%ADa' },
+  { titulo: 'Construcción y pinturas', desc: 'Selladoras epoxi, autonivelantes y aditivos para hormigón.', icon: HardHat, href: '/productos?cat=Construcci%C3%B3n+y+pinturas' },
 ];
 
 const schema = {
@@ -85,40 +102,48 @@ const schema = {
   url: site.url,
   telephone: site.phone.tel,
   email: site.email,
-  areaServed: `${site.locality}, España`,
+  areaServed: [
+    'Almería',
+    'El Ejido',
+    'Poniente almeriense',
+    'Campo de Níjar',
+    'Bajo Andarax',
+  ],
   address: {
     '@type': 'PostalAddress',
     addressLocality: site.locality,
+    addressRegion: 'Andalucía',
     addressCountry: site.country,
   },
 };
 ---
 <BaseLayout
-  title={`${site.name} · ${site.tagline}`}
-  description={site.description}
+  title={`${site.name} · Productos químicos profesionales para cooperativas e industria alimentaria en Almería`}
+  description="Proveedor técnico de detergentes, biocidas, aditivos para aguas de lavado, higiene de manos y producto food-grade para cooperativas hortofrutícolas, industria alimentaria, hostelería y mantenimiento en Almería."
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
 
   <!-- HERO -->
   <section class="relative overflow-hidden bg-surface">
-    <!-- Patrón sutil de fondo -->
     <div class="absolute inset-0 -z-10 opacity-[0.04]" aria-hidden="true">
       <div class="h-full w-full" style="background-image: radial-gradient(#1D1D1B 1px, transparent 1px); background-size: 24px 24px;"></div>
     </div>
     <div class="container-tight section grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-center">
       <div>
         <span class="badge-brand">
-          <ShieldCheck class="h-3.5 w-3.5" /> Empresa con Registro Oficial de Biocidas
+          <ShieldCheck class="h-3.5 w-3.5" /> Registro Oficial de Biocidas {site.registroBiocidas}
         </span>
         <h1 class="mt-5 text-4xl md:text-5xl lg:text-[56px] font-extrabold tracking-tight text-ink leading-[1.05]">
-          Soluciones químicas profesionales para <span class="text-brand-600">higiene, industria alimentaria, hostelería y mantenimiento</span>.
+          Producto químico profesional para <span class="text-brand-600">cooperativas, industria alimentaria y mantenimiento</span> en Almería.
         </h1>
         <p class="mt-6 text-lg text-muted max-w-xl">
-          Catálogo técnico de detergentes, desengrasantes, higienizantes, biocidas, aditivos y productos específicos para uso profesional.
+          Detergentes clorados, biocidas con registro oficial, aditivos para aguas de lavado, higiene de manos y producto food-grade para campaña hortofrutícola y procesos industriales.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/productos" class="btn-primary">Ver catálogo <ArrowRight class="h-4 w-4" /></a>
-          <a href="/contacto" class="btn-outline">Solicitar información</a>
+          <a href="/cooperativas" class="btn-primary">
+            Soluciones para cooperativas <ArrowRight class="h-4 w-4" />
+          </a>
+          <a href="/productos" class="btn-outline">Ver catálogo</a>
         </div>
       </div>
 
@@ -130,12 +155,12 @@ const schema = {
             {site.registroBiocidas}
           </p>
           <p class="mt-4 text-sm text-muted">
-            Autorización oficial para la comercialización y aplicación de productos biocidas de uso profesional.
+            Autorización oficial para la comercialización y aplicación de productos biocidas de uso profesional en industria alimentaria.
           </p>
           <div class="mt-6 border-t border-line pt-5 text-sm">
-            <p class="text-muted">¿Necesitas una solución concreta?</p>
-            <a href="/contacto" class="mt-1 inline-flex items-center gap-1 text-brand-600 font-semibold hover:underline">
-              Habla con el equipo técnico <ArrowRight class="h-3.5 w-3.5" />
+            <p class="text-muted">¿Preparando campaña?</p>
+            <a href="/cooperativas" class="mt-1 inline-flex items-center gap-1 text-brand-600 font-semibold hover:underline">
+              Revisión técnica en planta <ArrowRight class="h-3.5 w-3.5" />
             </a>
           </div>
         </div>
@@ -143,8 +168,46 @@ const schema = {
     </div>
   </section>
 
-  <!-- BLOQUE CONFIANZA -->
+  <!-- BLOQUE COOPERATIVAS (eje del negocio) -->
   <section class="section border-t border-line bg-surface-soft">
+    <div class="container-tight">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-start">
+        <div>
+          <p class="label-muted">Manipulado hortofrutícola</p>
+          <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
+            Especialistas en cooperativas y centros de manipulado
+          </h2>
+          <p class="mt-4 text-muted">
+            Producto técnico para cada punto del almacén: aguas de lavado, tratamiento de fruta, líneas y calibradoras, higiene del personal, cámaras y biocidas con Registro Oficial. Suministro continuado durante campaña y asesoría técnica en planta.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="/cooperativas" class="btn-primary">
+              Ver aplicaciones <ArrowRight class="h-4 w-4" />
+            </a>
+            <a href="/contacto?sector=cooperativa" class="btn-outline">
+              Agendar visita
+            </a>
+          </div>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {aplicacionesCooperativa.map(({ icon: Icon, titulo, desc, href }) => (
+            <a href={href} class="card-hover p-5 flex items-start gap-4">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand-600">
+                <Icon class="h-5 w-5" stroke-width={1.6} />
+              </div>
+              <div>
+                <p class="font-semibold text-ink leading-snug">{titulo}</p>
+                <p class="mt-1 text-sm text-muted">{desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE CONFIANZA -->
+  <section class="section">
     <div class="container-tight max-w-4xl text-center">
       <p class="label-muted">Proveedor técnico</p>
       <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
@@ -153,6 +216,37 @@ const schema = {
       <p class="mt-5 text-lg text-muted">
         Grupo Chemie ofrece soluciones para limpieza técnica, higiene profesional, procesos en industria alimentaria, mantenimiento y suministro industrial, con un catálogo adaptado a uso profesional y entornos exigentes.
       </p>
+    </div>
+  </section>
+
+  <!-- SECTORES (ordenados por peso real de negocio) -->
+  <section class="section bg-surface-soft border-t border-line">
+    <div class="container-tight">
+      <div class="max-w-3xl">
+        <p class="label-muted">Sectores</p>
+        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
+          Sectores a los que damos servicio
+        </h2>
+        <p class="mt-3 text-muted">
+          Especialistas en cooperativas hortofrutícolas e industria alimentaria. Cubrimos también hostelería, mantenimiento, automoción y construcción con catálogo técnico y suministro profesional.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {sectoresHome.map(({ icon: Icon, title, desc, href, cta, feature }) => (
+          <a
+            href={href}
+            class={`card-hover p-6 flex flex-col ${feature ? 'ring-1 ring-brand-200 bg-surface' : ''}`}
+          >
+            <Icon class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+            <h3 class="mt-3 font-semibold text-ink">{title}</h3>
+            <p class="mt-1 text-sm text-muted flex-1">{desc}</p>
+            <span class="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-brand-600">
+              {cta} <ArrowRight class="h-3.5 w-3.5" />
+            </span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -202,33 +296,8 @@ const schema = {
     </div>
   </section>
 
-  <!-- SECTORES -->
-  <section class="section bg-surface-soft border-t border-line">
-    <div class="container-tight">
-      <div class="max-w-3xl">
-        <p class="label-muted">Sectores</p>
-        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
-          Sectores a los que damos servicio
-        </h2>
-        <p class="mt-3 text-muted">
-          Trabajamos con industria alimentaria, hostelería, colectividades, mantenimiento, automoción, construcción y entornos industriales que requieren producto técnico y suministro profesional.
-        </p>
-      </div>
-
-      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sectoresHome.map(({ icon: Icon, title, desc }) => (
-          <div class="card p-6">
-            <Icon class="h-7 w-7 text-brand-500" stroke-width={1.6} />
-            <h3 class="mt-3 font-semibold text-ink">{title}</h3>
-            <p class="mt-1 text-sm text-muted">{desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- CONTACTO CTA -->
-  <section class="section">
+  <section class="section bg-surface-soft border-t border-line">
     <div class="container-tight">
       <div class="rounded-2xl bg-ink text-white p-8 md:p-14 grid gap-6 md:grid-cols-[1.2fr_1fr] md:items-center">
         <div>
@@ -237,7 +306,7 @@ const schema = {
             ¿Necesitas una solución concreta?
           </h2>
           <p class="mt-4 text-white/70 max-w-xl">
-            Indícanos tu sector, aplicación o tipo de producto y te orientamos hacia la gama más adecuada.
+            Indícanos sector, aplicación o tipo de producto y te orientamos hacia la gama más adecuada. Revisión técnica gratuita para cooperativas antes de campaña.
           </p>
         </div>
         <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 md:justify-end">

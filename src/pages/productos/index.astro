@@ -210,12 +210,26 @@ const totalCount = productos.length;
       }
       const params = new URLSearchParams(location.search);
       const cpParam = params.get('cp');
+      const catParam = params.get('cat');
+      const qParam = params.get('q');
       if (cpParam) {
         cpInputs.forEach((i) => {
           if (slug(i.value) === cpParam) i.checked = true;
         });
       }
       updateCatList();
+      if (catParam) {
+        const catAll = root.querySelector('input[name="cat"][value=""]');
+        let matched = false;
+        catInputs.forEach((i) => {
+          if (i.value && (i.value === catParam || slug(i.value) === slug(catParam))) {
+            i.checked = true;
+            matched = true;
+          }
+        });
+        if (matched && catAll) catAll.checked = false;
+      }
+      if (qParam && q) q.value = qParam;
 
       cpInputs.forEach((i) =>
         i.addEventListener('change', () => {

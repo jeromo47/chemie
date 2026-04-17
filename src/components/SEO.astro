@@ -1,4 +1,6 @@
 ---
+import { site } from '../config/site';
+
 export interface Props {
   title: string;
   description: string;
@@ -17,7 +19,7 @@ const {
   noindex = false,
 } = Astro.props;
 
-const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'https://grupochemie.com';
+const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? site.url;
 const canonicalURL = canonical ?? new URL(Astro.url.pathname, siteUrl).toString();
 const ogImage = new URL(image, siteUrl).toString();
 ---
@@ -32,8 +34,8 @@ const ogImage = new URL(image, siteUrl).toString();
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:site_name" content="Grupo Chemie" />
-<meta property="og:locale" content="es_ES" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />

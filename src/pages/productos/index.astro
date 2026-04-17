@@ -2,52 +2,240 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductCard from '../../components/ProductCard.astro';
+import { Search, SlidersHorizontal } from '@lucide/astro';
+import { categoriasPadre } from '../../config/site';
 
-const all = await getCollection('products');
-const productos = all.sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99));
+const productos = (await getCollection('products')).sort((a, b) =>
+  a.data.nombre.localeCompare(b.data.nombre, 'es'),
+);
 
-const familias = [...new Set(productos.map((p) => p.data.familia))].sort();
-const porFamilia = familias.map((familia) => ({
-  familia,
-  items: productos.filter((p) => p.data.familia === familia),
-}));
+// Categorías únicas por categoría padre (para el filtro secundario)
+const categoriasPorPadre: Record<string, string[]> = {};
+for (const cp of categoriasPadre) {
+  const setCats = new Set(
+    productos.filter((p) => p.data.categoriaPadre === cp).map((p) => p.data.categoria),
+  );
+  categoriasPorPadre[cp] = Array.from(setCats).sort((a, b) => a.localeCompare(b, 'es'));
+}
+
+const totalCount = productos.length;
 ---
 <BaseLayout
   title="Catálogo de productos · Grupo Chemie"
-  description="Catálogo de productos químicos y suministros industriales: biocidas registrados, detergencia, EPIs y consumibles para cooperativas y empresas."
+  description="Catálogo técnico: detergentes, desengrasantes, higiene de manos, biocidas, aditivos, talleres, hostelería, construcción y pavimentos industriales."
 >
-  <section class="section">
-    <div class="container-tight">
-      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Catálogo</p>
-      <h1 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Productos</h1>
-      <p class="mt-4 text-slate-600 max-w-2xl">
-        Selección organizada por familias. Para presupuestos, fichas técnicas o cantidades personalizadas contacta con el equipo comercial.
+  <!-- Cabecera -->
+  <section class="border-b border-line bg-surface-soft">
+    <div class="container-tight py-14 md:py-20">
+      <p class="label-muted">Catálogo</p>
+      <h1 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-ink">Productos</h1>
+      <p class="mt-4 text-muted max-w-2xl">
+        {totalCount} referencias organizadas por categoría padre y línea de producto.
+        Filtra, busca o descarga fichas técnicas contactando con el equipo comercial.
       </p>
-
-      {familias.length > 1 && (
-        <nav class="mt-8 flex flex-wrap gap-2 text-sm" aria-label="Familias de producto">
-          {familias.map((f) => (
-            <a href={`#${encodeURIComponent(f)}`} class="rounded-full border border-slate-200 px-3 py-1 text-slate-600 hover:border-brand-700 hover:text-brand-800">
-              {f}
-            </a>
-          ))}
-        </nav>
-      )}
-
-      <div class="mt-12 space-y-16">
-        {porFamilia.map(({ familia, items }) => (
-          <section id={encodeURIComponent(familia)} class="scroll-mt-24">
-            <h2 class="text-xl md:text-2xl font-bold">{familia}</h2>
-            <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((p) => <ProductCard product={p} />)}
-            </div>
-          </section>
-        ))}
-      </div>
-
-      {productos.length === 0 && (
-        <p class="mt-10 text-slate-500">El catálogo está en preparación. Pronto añadiremos productos.</p>
-      )}
     </div>
   </section>
+
+  <!-- Filtros + listado -->
+  <section class="section">
+    <div class="container-tight">
+      <div
+        id="catalogo"
+        data-productos-total={totalCount}
+        class="grid gap-10 lg:grid-cols-[260px_1fr]"
+      >
+        <!-- Sidebar filtros -->
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+          <div class="flex items-center gap-2 pb-3 border-b border-line">
+            <SlidersHorizontal class="h-4 w-4 text-brand-500" />
+            <h2 class="text-sm font-semibold text-ink">Filtros</h2>
+          </div>
+
+          <!-- Buscador -->
+          <div class="mt-5">
+            <label class="sr-only" for="q">Buscar producto</label>
+            <div class="relative">
+              <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted" />
+              <input
+                type="search"
+                id="q"
+                placeholder="Buscar por nombre o referencia…"
+                class="w-full rounded-md border border-line bg-surface pl-9 pr-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              />
+            </div>
+          </div>
+
+          <!-- Categoría padre -->
+          <div class="mt-6">
+            <p class="text-xs font-semibold uppercase tracking-wider text-muted">Gama</p>
+            <div class="mt-2 space-y-1.5">
+              <label class="flex items-center gap-2 text-sm cursor-pointer">
+                <input type="radio" name="cp" value="" checked class="accent-brand-500" />
+                <span>Todas ({totalCount})</span>
+              </label>
+              {categoriasPadre.map((cp) => {
+                const count = productos.filter((p) => p.data.categoriaPadre === cp).length;
+                if (count === 0) return null;
+                return (
+                  <label class="flex items-center gap-2 text-sm cursor-pointer">
+                    <input type="radio" name="cp" value={cp} class="accent-brand-500" />
+                    <span>{cp} <span class="text-muted/70">({count})</span></span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
+          <!-- Categoría hija -->
+          <div class="mt-6">
+            <p class="text-xs font-semibold uppercase tracking-wider text-muted">Categoría</p>
+            <div id="cat-list" class="mt-2 space-y-1.5">
+              <label class="flex items-center gap-2 text-sm cursor-pointer">
+                <input type="radio" name="cat" value="" checked class="accent-brand-500" />
+                <span>Todas</span>
+              </label>
+              {Object.entries(categoriasPorPadre).flatMap(([cp, cats]) =>
+                cats.map((cat) => (
+                  <label
+                    class="flex items-center gap-2 text-sm cursor-pointer"
+                    data-cp={cp}
+                  >
+                    <input type="radio" name="cat" value={cat} class="accent-brand-500" />
+                    <span>{cat}</span>
+                  </label>
+                )),
+              )}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            id="reset-filters"
+            class="mt-6 text-xs font-semibold text-brand-600 hover:underline"
+          >
+            Restablecer filtros
+          </button>
+        </aside>
+
+        <!-- Grid -->
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm text-muted">
+              <span id="count">{totalCount}</span> referencias
+            </p>
+          </div>
+
+          <div id="grid" class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {productos.map((p) => (
+              <div
+                class="product-item"
+                data-cp={p.data.categoriaPadre}
+                data-cat={p.data.categoria}
+                data-search={`${p.data.nombre} ${p.data.ref} ${p.data.descripcion}`.toLowerCase()}
+              >
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
+
+          <p id="empty-state" class="hidden mt-10 text-center text-muted">
+            No se han encontrado productos con esos filtros.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const root = document.getElementById('catalogo');
+      if (!root) return;
+      const q = document.getElementById('q');
+      const cpInputs = root.querySelectorAll('input[name="cp"]');
+      const catInputs = root.querySelectorAll('input[name="cat"]');
+      const catLabels = root.querySelectorAll('#cat-list label[data-cp]');
+      const items = root.querySelectorAll('.product-item');
+      const count = document.getElementById('count');
+      const empty = document.getElementById('empty-state');
+      const reset = document.getElementById('reset-filters');
+
+      function getCp() {
+        const checked = root.querySelector('input[name="cp"]:checked');
+        return checked ? checked.value : '';
+      }
+      function getCat() {
+        const checked = root.querySelector('input[name="cat"]:checked');
+        return checked ? checked.value : '';
+      }
+
+      function updateCatList() {
+        const cp = getCp();
+        catLabels.forEach((label) => {
+          const ok = !cp || label.dataset.cp === cp;
+          label.style.display = ok ? '' : 'none';
+          const input = label.querySelector('input');
+          if (!ok && input && input.checked) input.checked = false;
+        });
+        const allCats = root.querySelector('input[name="cat"][value=""]');
+        if (allCats && !root.querySelector('input[name="cat"]:checked')) {
+          allCats.checked = true;
+        }
+      }
+
+      function applyFilters() {
+        const cp = getCp();
+        const cat = getCat();
+        const term = (q?.value ?? '').trim().toLowerCase();
+        let visible = 0;
+        items.forEach((item) => {
+          const matchCp = !cp || item.dataset.cp === cp;
+          const matchCat = !cat || item.dataset.cat === cat;
+          const matchTerm = !term || item.dataset.search.includes(term);
+          const ok = matchCp && matchCat && matchTerm;
+          item.style.display = ok ? '' : 'none';
+          if (ok) visible++;
+        });
+        if (count) count.textContent = visible;
+        if (empty) empty.classList.toggle('hidden', visible !== 0);
+      }
+
+      // Sincroniza con querystring (?cp=industria-en-general)
+      function slug(s) {
+        return s
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+      }
+      const params = new URLSearchParams(location.search);
+      const cpParam = params.get('cp');
+      if (cpParam) {
+        cpInputs.forEach((i) => {
+          if (slug(i.value) === cpParam) i.checked = true;
+        });
+      }
+      updateCatList();
+
+      cpInputs.forEach((i) =>
+        i.addEventListener('change', () => {
+          updateCatList();
+          applyFilters();
+        }),
+      );
+      catInputs.forEach((i) => i.addEventListener('change', applyFilters));
+      q?.addEventListener('input', applyFilters);
+      reset?.addEventListener('click', () => {
+        const cpAll = root.querySelector('input[name="cp"][value=""]');
+        const catAll = root.querySelector('input[name="cat"][value=""]');
+        if (cpAll) cpAll.checked = true;
+        if (catAll) catAll.checked = true;
+        if (q) q.value = '';
+        updateCatList();
+        applyFilters();
+      });
+
+      applyFilters();
+    })();
+  </script>
 </BaseLayout>

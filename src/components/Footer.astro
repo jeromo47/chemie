@@ -1,56 +1,59 @@
 ---
-import { Mail, Phone, MapPin } from '@lucide/astro';
+import { Mail, Phone, MapPin, Clock } from '@lucide/astro';
+import Logo from './Logo.astro';
+import { site } from '../config/site';
 const year = new Date().getFullYear();
 ---
-<footer class="border-t border-slate-200 bg-slate-50">
-  <div class="container-tight py-12 grid gap-10 md:grid-cols-4">
+<footer class="border-t border-line bg-surface-soft">
+  <div class="container-tight py-14 grid gap-10 md:grid-cols-4">
     <div class="md:col-span-2">
-      <div class="flex items-center gap-2">
-        <span class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-brand-800 text-white font-bold">C</span>
-        <span class="text-lg font-bold text-slate-900">Grupo Chemie</span>
-      </div>
-      <p class="mt-3 text-sm text-slate-600 max-w-sm">
-        Distribución de productos químicos y suministros industriales en Almería.
-        Soluciones para cooperativas agrícolas, industria alimentaria, talleres y hostelería.
+      <Logo variant="full" class="h-10 w-auto" />
+      <p class="mt-4 text-sm text-muted max-w-sm">
+        {site.description}
       </p>
-      <p class="mt-3 text-xs text-slate-500">
-        Registro Oficial de Biocidas <strong class="text-slate-700">12-20/40-06373-HA</strong>
+      <p class="mt-3 text-xs text-muted">
+        Registro Oficial de Biocidas <span class="font-semibold text-ink">{site.registroBiocidas}</span>
       </p>
     </div>
 
     <div>
-      <h3 class="text-sm font-semibold text-slate-900">Contacto</h3>
-      <ul class="mt-3 space-y-2 text-sm text-slate-600">
+      <h3 class="text-sm font-semibold text-ink">Contacto</h3>
+      <ul class="mt-3 space-y-2.5 text-sm text-muted">
         <li class="flex items-start gap-2">
-          <MapPin class="h-4 w-4 mt-0.5 text-brand-700" />
-          <span>Almería<br /><span class="text-slate-400">[Dirección completa — placeholder]</span></span>
+          <MapPin class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" />
+          <span>{site.locality}<br /><span class="text-muted/70">[Dirección completa — placeholder]</span></span>
         </li>
         <li class="flex items-center gap-2">
-          <Phone class="h-4 w-4 text-brand-700" />
-          <a href="tel:+34609662482" class="hover:text-brand-800">609 662 482</a>
+          <Phone class="h-4 w-4 text-brand-500 flex-shrink-0" />
+          <a href={`tel:${site.phone.tel}`} class="hover:text-brand-600 transition-colors">{site.phone.display}</a>
         </li>
         <li class="flex items-center gap-2">
-          <Mail class="h-4 w-4 text-brand-700" />
-          <a href="mailto:info@grupochemie.com" class="hover:text-brand-800">info@grupochemie.com</a>
+          <Mail class="h-4 w-4 text-brand-500 flex-shrink-0" />
+          <a href={`mailto:${site.email}`} class="hover:text-brand-600 transition-colors">{site.email}</a>
+        </li>
+        <li class="flex items-center gap-2">
+          <Clock class="h-4 w-4 text-brand-500 flex-shrink-0" />
+          <span>{site.horario.display}</span>
         </li>
       </ul>
     </div>
 
     <div>
-      <h3 class="text-sm font-semibold text-slate-900">Enlaces</h3>
-      <ul class="mt-3 space-y-2 text-sm text-slate-600">
-        <li><a href="/productos" class="hover:text-brand-800">Productos</a></li>
-        <li><a href="/cooperativas" class="hover:text-brand-800">Cooperativas</a></li>
-        <li><a href="/sectores" class="hover:text-brand-800">Sectores</a></li>
-        <li><a href="/contacto" class="hover:text-brand-800">Contacto</a></li>
+      <h3 class="text-sm font-semibold text-ink">Catálogo</h3>
+      <ul class="mt-3 space-y-2 text-sm text-muted">
+        <li><a href="/productos" class="hover:text-brand-600 transition-colors">Todos los productos</a></li>
+        <li><a href="/productos?cp=industria-en-general" class="hover:text-brand-600 transition-colors">Industria en general</a></li>
+        <li><a href="/productos?cp=industria-alimentaria" class="hover:text-brand-600 transition-colors">Industria alimentaria</a></li>
+        <li><a href="/sectores" class="hover:text-brand-600 transition-colors">Sectores</a></li>
+        <li><a href="/contacto" class="hover:text-brand-600 transition-colors">Contacto</a></li>
       </ul>
     </div>
   </div>
 
-  <div class="border-t border-slate-200">
-    <div class="container-tight py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
-      <p>&copy; {year} Grupo Chemie. Todos los derechos reservados.</p>
-      <p>Distribución de productos químicos · Almería</p>
+  <div class="border-t border-line">
+    <div class="container-tight py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted">
+      <p>&copy; {year} {site.name}. Todos los derechos reservados.</p>
+      <p>Distribución de productos químicos · {site.locality}</p>
     </div>
   </div>
 </footer>

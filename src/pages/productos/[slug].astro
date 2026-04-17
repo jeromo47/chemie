@@ -2,22 +2,33 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { ShieldCheck, FileDown, ArrowLeft, Package, Wrench } from '@lucide/astro';
+import ProductCard from '../../components/ProductCard.astro';
+import {
+  ShieldCheck,
+  FileDown,
+  ArrowLeft,
+  FlaskConical,
+  ChevronRight,
+  MessageCircle,
+  CircleCheck,
+} from '@lucide/astro';
+import { site } from '../../config/site';
 
 export async function getStaticPaths() {
   const productos = await getCollection('products');
   return productos.map((product) => ({
     params: { slug: product.slug },
-    props: { product },
+    props: { product, all: productos },
   }));
 }
 
-const { product } = Astro.props;
+const { product, all } = Astro.props;
 const { Content } = await product.render();
 const {
   nombre,
   ref,
-  familia,
+  categoria,
+  categoriaPadre,
   descripcion,
   usos,
   presentaciones,
@@ -25,35 +36,98 @@ const {
   imagen,
   fichaPDF,
 } = product.data;
+
+// Relacionados: misma categoría, distinta entrada, hasta 3
+const relacionados = all
+  .filter(
+    (p) =>
+      p.slug !== product.slug &&
+      p.data.categoria === categoria &&
+      p.data.categoriaPadre === categoriaPadre,
+  )
+  .slice(0, 3);
+
+// Schema.org Product
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: nombre,
+  sku: ref,
+  description: descripcion,
+  category: `${categoriaPadre} / ${categoria}`,
+  brand: { '@type': 'Brand', name: site.name },
+  manufacturer: { '@type': 'Organization', name: site.name },
+};
+
+// Schema.org BreadcrumbList
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
+    { '@type': 'ListItem', position: 2, name: 'Productos', item: `${site.url}/productos` },
+    { '@type': 'ListItem', position: 3, name: nombre, item: `${site.url}/productos/${product.slug}` },
+  ],
+};
+
+const waMsg = encodeURIComponent(`Hola, me interesa información técnica sobre ${nombre} (ref. ${ref}).`);
+const waLink = `https://wa.me/${site.whatsapp.number}?text=${waMsg}`;
 ---
 <BaseLayout
-  title={`${nombre} · Grupo Chemie`}
+  title={`${nombre} · ${categoria} · ${site.name}`}
   description={descripcion}
   type="article"
 >
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(productSchema)} />
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="border-b border-line bg-surface-soft" aria-label="Breadcrumb">
+    <div class="container-tight py-3 flex items-center gap-1 text-xs text-muted flex-wrap">
+      <a href="/" class="hover:text-brand-600">Inicio</a>
+      <ChevronRight class="h-3 w-3 text-line" />
+      <a href="/productos" class="hover:text-brand-600">Productos</a>
+      <ChevronRight class="h-3 w-3 text-line" />
+      <a
+        href={`/productos?cp=${encodeURIComponent(categoriaPadre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-'))}`}
+        class="hover:text-brand-600"
+      >
+        {categoriaPadre}
+      </a>
+      <ChevronRight class="h-3 w-3 text-line" />
+      <span class="text-ink font-medium">{nombre}</span>
+    </div>
+  </nav>
+
   <section class="section">
     <div class="container-tight">
-      <a href="/productos" class="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-brand-800">
+      <a href="/productos" class="inline-flex items-center gap-1 text-sm text-muted hover:text-brand-600 transition-colors">
         <ArrowLeft class="h-4 w-4" /> Volver al catálogo
       </a>
 
       <div class="mt-6 grid gap-10 lg:grid-cols-2 lg:items-start">
-        <div class="aspect-square w-full rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden">
+        <!-- Imagen -->
+        <div class="aspect-square w-full rounded-xl border border-line bg-surface-soft flex items-center justify-center overflow-hidden">
           {imagen ? (
             <Image src={imagen} alt={nombre} width={900} height={900} class="h-full w-full object-cover" />
           ) : (
-            <Package class="h-20 w-20 text-slate-300" />
+            <FlaskConical class="h-20 w-20 text-brand-200" stroke-width={1.2} />
           )}
         </div>
 
+        <!-- Info principal -->
         <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{familia}</p>
-          <h1 class="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight">{nombre}</h1>
-          <p class="mt-2 text-sm text-slate-500">Ref. {ref}</p>
-          <p class="mt-5 text-slate-700">{descripcion}</p>
+          <div class="flex items-center gap-2 text-xs uppercase tracking-wider text-muted">
+            <span>{categoriaPadre}</span>
+            <span class="text-line">/</span>
+            <span>{categoria}</span>
+          </div>
+          <h1 class="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-ink">{nombre}</h1>
+          <p class="mt-2 text-sm text-muted">Ref. <span class="font-medium text-ink">{ref}</span></p>
+          <p class="mt-5 text-ink">{descripcion}</p>
 
           {registroBiocida && (
-            <div class="mt-5 inline-flex items-center gap-2 rounded-md bg-brand-50 border border-brand-100 px-3 py-2 text-sm text-brand-800">
+            <div class="mt-5 inline-flex items-center gap-2 rounded-md bg-brand-50 border border-brand-200 px-3 py-2 text-sm text-brand-700">
               <ShieldCheck class="h-4 w-4" />
               <span>Registro Oficial de Biocidas <strong>{registroBiocida}</strong></span>
             </div>
@@ -61,10 +135,10 @@ const {
 
           {presentaciones.length > 0 && (
             <div class="mt-6">
-              <h2 class="text-sm font-semibold text-slate-900">Presentaciones</h2>
+              <h2 class="text-sm font-semibold text-ink">Presentaciones</h2>
               <ul class="mt-2 flex flex-wrap gap-2">
                 {presentaciones.map((p) => (
-                  <li class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">{p}</li>
+                  <li class="rounded-full border border-line bg-surface px-3 py-1 text-sm text-ink">{p}</li>
                 ))}
               </ul>
             </div>
@@ -72,19 +146,24 @@ const {
 
           {usos.length > 0 && (
             <div class="mt-6">
-              <h2 class="text-sm font-semibold text-slate-900">Usos recomendados</h2>
-              <ul class="mt-2 space-y-1 text-sm text-slate-700">
+              <h2 class="text-sm font-semibold text-ink">Usos recomendados</h2>
+              <ul class="mt-2 space-y-1.5 text-sm text-muted">
                 {usos.map((u) => (
-                  <li class="flex items-start gap-2"><Wrench class="h-4 w-4 mt-0.5 text-brand-700" />{u}</li>
+                  <li class="flex items-start gap-2">
+                    <CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" />{u}
+                  </li>
                 ))}
               </ul>
             </div>
           )}
 
           <div class="mt-8 flex flex-wrap gap-3">
-            <a href="/contacto" class="btn-primary">Solicitar presupuesto</a>
+            <a href="/contacto" class="btn-primary">Solicitar información</a>
+            <a href={waLink} target="_blank" rel="noopener noreferrer" class="btn-outline">
+              <MessageCircle class="h-4 w-4" /> WhatsApp
+            </a>
             {fichaPDF && (
-              <a href={fichaPDF} class="btn-outline" target="_blank" rel="noopener">
+              <a href={fichaPDF} class="btn-ghost" target="_blank" rel="noopener noreferrer">
                 <FileDown class="h-4 w-4" /> Descargar ficha PDF
               </a>
             )}
@@ -92,9 +171,22 @@ const {
         </div>
       </div>
 
+      <!-- Contenido Markdown extendido -->
       <article class="prose prose-slate max-w-3xl mt-16">
         <Content />
       </article>
     </div>
   </section>
+
+  {relacionados.length > 0 && (
+    <section class="section bg-surface-soft border-t border-line">
+      <div class="container-tight">
+        <h2 class="text-xl md:text-2xl font-bold text-ink">Productos relacionados</h2>
+        <p class="mt-1 text-sm text-muted">Misma categoría: {categoria}.</p>
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {relacionados.map((p) => <ProductCard product={p} />)}
+        </div>
+      </div>
+    </section>
+  )}
 </BaseLayout>

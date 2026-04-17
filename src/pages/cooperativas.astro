@@ -1,35 +1,43 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Sprout, Droplets, ShieldCheck, Truck, CircleCheck, ArrowRight } from '@lucide/astro';
+import {
+  Sprout,
+  Droplets,
+  ShieldCheck,
+  Truck,
+  CircleCheck,
+  ArrowRight,
+} from '@lucide/astro';
+import { site } from '../config/site';
 ---
 <BaseLayout
-  title="Cooperativas agrícolas · Grupo Chemie"
-  description="Línea específica para cooperativas agrícolas de Almería: higiene, desinfección, detergencia CIP, biocidas registrados y suministros industriales."
+  title={`Cooperativas y manipulado · ${site.name}`}
+  description="Productos técnicos para cooperativas y centros de manipulado: higiene de manos, detergencia clorada, biocidas y aditivos para aguas de lavado."
 >
-  <section class="relative bg-gradient-to-b from-brand-50 to-white border-b border-slate-100">
+  <section class="border-b border-line bg-surface-soft">
     <div class="container-tight section grid gap-10 lg:grid-cols-2 lg:items-center">
       <div>
-        <span class="inline-flex items-center gap-2 rounded-full bg-white border border-brand-100 px-3 py-1 text-xs font-semibold text-brand-800">
-          <Sprout class="h-3.5 w-3.5" /> Línea cooperativas
+        <span class="badge-brand">
+          <Sprout class="h-3.5 w-3.5" /> Cooperativas y manipulado
         </span>
-        <h1 class="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
-          Productos químicos para <span class="text-brand-800">cooperativas agrícolas</span> de Almería.
+        <h1 class="mt-5 text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
+          Producto técnico para <span class="text-brand-600">cooperativas y centros de manipulado</span>
         </h1>
-        <p class="mt-5 text-lg text-slate-600 max-w-xl">
-          Higiene, desinfección, detergencia CIP y consumibles para manipulado y envasado hortofrutícola. Cumplimiento normativo y servicio continuo.
+        <p class="mt-5 text-lg text-muted max-w-xl">
+          Detergentes clorados, biocidas, higiene de manos y aditivos para aguas de lavado. Cumplimiento normativo en industria alimentaria y suministro continuado en campaña.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a href="/contacto" class="btn-primary">Solicitar visita comercial <ArrowRight class="h-4 w-4" /></a>
-          <a href="/productos" class="btn-outline">Ver productos</a>
+          <a href="/productos?cp=industria-alimentaria" class="btn-outline">Ver productos</a>
         </div>
       </div>
-      <div class="rounded-2xl bg-white border border-slate-200 shadow-sm p-6">
-        <h2 class="text-lg font-semibold">¿Por qué Grupo Chemie?</h2>
-        <ul class="mt-4 space-y-3 text-sm text-slate-700">
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-700" /> Biocidas autorizados con Registro Oficial.</li>
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-700" /> Asesoramiento técnico en planta.</li>
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-700" /> Entrega rápida en Almería y provincia.</li>
-          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-700" /> Condiciones adaptadas a cooperativa.</li>
+      <div class="card p-6">
+        <h2 class="text-lg font-semibold text-ink">Argumentos técnicos</h2>
+        <ul class="mt-4 space-y-3 text-sm text-muted">
+          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Biocidas con Registro Oficial ({site.registroBiocidas}).</li>
+          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Productos compatibles con superficies en contacto con alimentos.</li>
+          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Higiene de manos específica para industria alimentaria.</li>
+          <li class="flex items-start gap-2"><CircleCheck class="h-4 w-4 mt-0.5 text-brand-500 flex-shrink-0" /> Suministro continuado en campaña.</li>
         </ul>
       </div>
     </div>
@@ -37,34 +45,34 @@ import { Sprout, Droplets, ShieldCheck, Truck, CircleCheck, ArrowRight } from '@
 
   <section class="section">
     <div class="container-tight">
-      <h2 class="text-2xl md:text-3xl font-bold">Soluciones para cada etapa</h2>
-      <div class="mt-8 grid gap-6 md:grid-cols-3">
-        <div class="rounded-lg border border-slate-200 p-6">
-          <Droplets class="h-7 w-7 text-brand-700" />
-          <h3 class="mt-3 font-semibold">Detergencia CIP</h3>
-          <p class="mt-1 text-sm text-slate-600">Alcalinos, ácidos y desincrustantes para líneas de envasado y depósitos.</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-ink tracking-tight">Soluciones por aplicación</h2>
+      <div class="mt-8 grid gap-5 md:grid-cols-3">
+        <div class="card p-6">
+          <Droplets class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+          <h3 class="mt-3 font-semibold text-ink">Detergencia y túneles de lavado</h3>
+          <p class="mt-1 text-sm text-muted">Clorados y no clorados para túneles de lavado y líneas de envasado.</p>
         </div>
-        <div class="rounded-lg border border-slate-200 p-6">
-          <ShieldCheck class="h-7 w-7 text-brand-700" />
-          <h3 class="mt-3 font-semibold">Higiene y desinfección</h3>
-          <p class="mt-1 text-sm text-slate-600">Biocidas con registro oficial para superficies y equipos en contacto con alimentos.</p>
+        <div class="card p-6">
+          <ShieldCheck class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+          <h3 class="mt-3 font-semibold text-ink">Higiene y biocidas</h3>
+          <p class="mt-1 text-sm text-muted">Detergentes higienizantes y biocidas con registro oficial.</p>
         </div>
-        <div class="rounded-lg border border-slate-200 p-6">
-          <Truck class="h-7 w-7 text-brand-700" />
-          <h3 class="mt-3 font-semibold">Logística y stock</h3>
-          <p class="mt-1 text-sm text-slate-600">Servicio continuo en campaña, con reposición programada de consumibles.</p>
+        <div class="card p-6">
+          <Truck class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+          <h3 class="mt-3 font-semibold text-ink">Aguas de lavado</h3>
+          <p class="mt-1 text-sm text-muted">Aditivos, secantes y producto oxigenado para evitar contaminación cruzada.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section bg-brand-800 text-white">
+  <section class="section bg-ink text-white">
     <div class="container-tight text-center">
-      <h2 class="text-2xl md:text-3xl font-bold text-white">Prepara tu próxima campaña</h2>
-      <p class="mt-3 text-brand-50/90 max-w-2xl mx-auto">
-        Hablamos con el responsable de calidad o mantenimiento de tu cooperativa y preparamos un plan adaptado.
+      <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Prepara tu próxima campaña</h2>
+      <p class="mt-3 text-white/70 max-w-2xl mx-auto">
+        Hablamos con el responsable de calidad o mantenimiento de tu cooperativa y te proponemos un plan adaptado.
       </p>
-      <a href="/contacto" class="btn bg-white text-brand-800 hover:bg-brand-50 mt-6">Contactar ahora</a>
+      <a href="/contacto" class="btn bg-brand-500 text-white hover:bg-brand-600 mt-6">Contactar ahora</a>
     </div>
   </section>
 </BaseLayout>

@@ -1,33 +1,51 @@
 ---
-import { Menu, X } from '@lucide/astro';
-
-const nav = [
-  { href: '/', label: 'Inicio' },
-  { href: '/nosotros', label: 'Nosotros' },
-  { href: '/productos', label: 'Productos' },
-  { href: '/cooperativas', label: 'Cooperativas' },
-  { href: '/sectores', label: 'Sectores' },
-];
+import { Menu, X, Phone, Clock } from '@lucide/astro';
+import Logo from './Logo.astro';
+import { site } from '../config/site';
 
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
-<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
-  <div class="container-tight flex h-16 items-center justify-between">
-    <a href="/" class="flex items-center gap-2" aria-label="Grupo Chemie - Inicio">
-      <span class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-brand-800 text-white font-bold">C</span>
-      <span class="text-lg font-bold text-slate-900 tracking-tight">Grupo Chemie</span>
+<!-- Top-bar (desktop) -->
+<div class="hidden md:block bg-ink text-white/90 text-xs">
+  <div class="container-tight flex items-center justify-between h-9">
+    <div class="flex items-center gap-5">
+      <span class="inline-flex items-center gap-1.5">
+        <Clock class="h-3.5 w-3.5 text-brand-400" />
+        {site.horario.display}
+      </span>
+      <span class="text-white/30">·</span>
+      <a href={`tel:${site.phone.tel}`} class="inline-flex items-center gap-1.5 hover:text-brand-400 transition-colors">
+        <Phone class="h-3.5 w-3.5 text-brand-400" />
+        {site.phone.display}
+      </a>
+      <span class="text-white/30">·</span>
+      <a href={`mailto:${site.email}`} class="hover:text-brand-400 transition-colors">
+        {site.email}
+      </a>
+    </div>
+    <div class="text-white/70">
+      Registro de Biocidas <span class="text-white font-medium">{site.registroBiocidas}</span>
+    </div>
+  </div>
+</div>
+
+<header class="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
+  <div class="container-tight flex h-16 items-center justify-between gap-4">
+    <a href="/" class="flex items-center" aria-label={`${site.name} · Inicio`}>
+      <Logo variant="full" class="h-9 w-auto" />
     </a>
 
-    <nav class="hidden md:flex items-center gap-6" aria-label="Principal">
-      {nav.map(({ href, label }) => {
+    <nav class="hidden md:flex items-center gap-7" aria-label="Principal">
+      {site.nav.map(({ href, label }) => {
         const active = pathname === href || (href !== '/' && pathname.startsWith(href));
         return (
           <a
             href={href}
             class:list={[
               'text-sm font-medium transition-colors',
-              active ? 'text-brand-800' : 'text-slate-700 hover:text-brand-800',
+              active ? 'text-brand-600' : 'text-ink hover:text-brand-600',
             ]}
+            aria-current={active ? 'page' : undefined}
           >
             {label}
           </a>
@@ -38,7 +56,7 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 
     <button
       id="nav-toggle"
-      class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-slate-700 hover:bg-slate-100"
+      class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-ink hover:bg-surface-soft"
       aria-label="Abrir menú"
       aria-expanded="false"
       aria-controls="mobile-nav"
@@ -48,12 +66,20 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
     </button>
   </div>
 
-  <div id="mobile-nav" class="md:hidden hidden border-t border-slate-200 bg-white">
+  <div id="mobile-nav" class="md:hidden hidden border-t border-line bg-surface">
     <nav class="container-tight flex flex-col py-4 gap-1" aria-label="Móvil">
-      {nav.map(({ href, label }) => (
-        <a href={href} class="py-2 text-slate-700 hover:text-brand-800 font-medium">{label}</a>
+      {site.nav.map(({ href, label }) => (
+        <a href={href} class="py-2 text-ink hover:text-brand-600 font-medium">{label}</a>
       ))}
       <a href="/contacto" class="btn-primary mt-2 self-start">Contacto</a>
+      <div class="mt-4 pt-4 border-t border-line text-sm text-muted flex flex-col gap-1.5">
+        <a href={`tel:${site.phone.tel}`} class="inline-flex items-center gap-2">
+          <Phone class="h-4 w-4 text-brand-500" />{site.phone.display}
+        </a>
+        <span class="inline-flex items-center gap-2">
+          <Clock class="h-4 w-4 text-brand-500" />{site.horario.display}
+        </span>
+      </div>
     </nav>
   </div>
 </header>

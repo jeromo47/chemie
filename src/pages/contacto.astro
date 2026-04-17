@@ -2,89 +2,88 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { Phone, Mail, MapPin, MessageCircle, Clock } from '@lucide/astro';
-
-const whatsapp = import.meta.env.PUBLIC_WHATSAPP_NUMBER ?? '34609662482';
+import { site } from '../config/site';
 
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: 'Grupo Chemie',
-  url: 'https://grupochemie.com/contacto',
-  telephone: '+34609662482',
-  email: 'info@grupochemie.com',
+  name: site.name,
+  url: `${site.url}/contacto`,
+  telephone: site.phone.tel,
+  email: site.email,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Almería',
-    addressCountry: 'ES',
+    addressLocality: site.locality,
+    addressCountry: site.country,
   },
-  openingHours: 'Mo-Fr 09:00-18:00',
+  openingHours: site.horario.schema,
 };
 ---
 <BaseLayout
-  title="Contacto · Grupo Chemie"
-  description="Contacta con Grupo Chemie: teléfono, email, WhatsApp y formulario para cooperativas y empresas en Almería."
+  title={`Contacto · ${site.name}`}
+  description={`Contacta con ${site.name}: teléfono, email, WhatsApp y formulario para cliente profesional en ${site.locality}.`}
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
 
   <section class="section">
     <div class="container-tight grid gap-12 lg:grid-cols-5">
       <div class="lg:col-span-2">
-        <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Contacto</p>
-        <h1 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Hablemos</h1>
-        <p class="mt-4 text-slate-600">
-          Escríbenos por el canal que prefieras. Respondemos en horario comercial.
+        <p class="label-muted">Contacto</p>
+        <h1 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-ink">Hablemos</h1>
+        <p class="mt-4 text-muted">
+          Indícanos sector, aplicación o tipo de producto y te orientamos hacia la gama más adecuada.
         </p>
 
-        <ul class="mt-8 space-y-4 text-sm">
+        <ul class="mt-10 space-y-5 text-sm">
           <li class="flex items-start gap-3">
-            <MapPin class="h-5 w-5 text-brand-700 mt-0.5" />
+            <MapPin class="h-5 w-5 text-brand-500 mt-0.5 flex-shrink-0" />
             <div>
-              <p class="font-semibold text-slate-900">Dirección</p>
-              <p class="text-slate-600">Almería<br /><span class="text-slate-400">[Dirección completa — placeholder]</span></p>
+              <p class="font-semibold text-ink">Dirección</p>
+              <p class="text-muted">{site.locality}<br /><span class="text-muted/70">[Dirección completa — placeholder]</span></p>
             </div>
           </li>
           <li class="flex items-start gap-3">
-            <Phone class="h-5 w-5 text-brand-700 mt-0.5" />
+            <Phone class="h-5 w-5 text-brand-500 mt-0.5 flex-shrink-0" />
             <div>
-              <p class="font-semibold text-slate-900">Teléfono</p>
-              <a href="tel:+34609662482" class="text-slate-600 hover:text-brand-800">609 662 482</a>
+              <p class="font-semibold text-ink">Teléfono</p>
+              <a href={`tel:${site.phone.tel}`} class="text-muted hover:text-brand-600 transition-colors">{site.phone.display}</a>
             </div>
           </li>
           <li class="flex items-start gap-3">
-            <MessageCircle class="h-5 w-5 text-brand-700 mt-0.5" />
+            <MessageCircle class="h-5 w-5 text-brand-500 mt-0.5 flex-shrink-0" />
             <div>
-              <p class="font-semibold text-slate-900">WhatsApp</p>
+              <p class="font-semibold text-ink">WhatsApp</p>
               <a
-                href={`https://wa.me/${whatsapp}`}
+                href={`https://wa.me/${site.whatsapp.number}`}
                 target="_blank"
-                rel="noopener"
-                class="text-slate-600 hover:text-brand-800"
+                rel="noopener noreferrer"
+                class="text-muted hover:text-brand-600 transition-colors"
               >
                 Abrir chat de WhatsApp
               </a>
             </div>
           </li>
           <li class="flex items-start gap-3">
-            <Mail class="h-5 w-5 text-brand-700 mt-0.5" />
+            <Mail class="h-5 w-5 text-brand-500 mt-0.5 flex-shrink-0" />
             <div>
-              <p class="font-semibold text-slate-900">Email</p>
-              <a href="mailto:info@grupochemie.com" class="text-slate-600 hover:text-brand-800">info@grupochemie.com</a>
+              <p class="font-semibold text-ink">Email</p>
+              <a href={`mailto:${site.email}`} class="text-muted hover:text-brand-600 transition-colors">{site.email}</a>
             </div>
           </li>
           <li class="flex items-start gap-3">
-            <Clock class="h-5 w-5 text-brand-700 mt-0.5" />
+            <Clock class="h-5 w-5 text-brand-500 mt-0.5 flex-shrink-0" />
             <div>
-              <p class="font-semibold text-slate-900">Horario</p>
-              <p class="text-slate-600">Lunes a viernes · 09:00 — 18:00</p>
+              <p class="font-semibold text-ink">Horario</p>
+              <p class="text-muted">{site.horario.display}</p>
             </div>
           </li>
         </ul>
       </div>
 
       <div class="lg:col-span-3">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 md:p-8">
-          <h2 class="text-xl font-semibold">Formulario de contacto</h2>
-          <p class="mt-1 text-sm text-slate-600">Cuéntanos tu necesidad y nos ponemos en contacto.</p>
+        <div class="rounded-2xl border border-line bg-surface-soft p-6 md:p-8">
+          <h2 class="text-xl font-semibold text-ink">Formulario de contacto</h2>
+          <p class="mt-1 text-sm text-muted">Cuéntanos tu necesidad y te responderemos en horario comercial.</p>
           <div class="mt-6">
             <ContactForm />
           </div>

@@ -1,139 +1,250 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { ShieldCheck, Truck, HeartHandshake, Beaker, ArrowRight, CircleCheck } from '@lucide/astro';
+import {
+  ShieldCheck,
+  ArrowRight,
+  FlaskConical,
+  Droplets,
+  HandPlatter,
+  Wrench,
+  HardHat,
+  ChefHat,
+  Factory,
+  Leaf,
+  PackageSearch,
+} from '@lucide/astro';
+import { site, categoriasPadre } from '../config/site';
 
-const productos = (await getCollection('products'))
-  .filter((p) => p.data.destacado)
-  .sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99))
-  .slice(0, 6);
+const productos = await getCollection('products');
+
+// Conteos por categoría padre para el bloque "Catálogo por familias"
+const conteoPadre = Object.fromEntries(
+  categoriasPadre.map((cp) => [cp, productos.filter((p) => p.data.categoriaPadre === cp).length]),
+);
+
+const categoriasHome = [
+  {
+    titulo: 'Detergentes y desengrasantes',
+    desc: 'Detergencia técnica, desengrasantes multiusos y fregasuelos para entornos profesionales.',
+    icon: Droplets,
+    href: '/productos?cat=Detergentes+y+desengrasantes',
+  },
+  {
+    titulo: 'Higiene de manos',
+    desc: 'Geles, pastas, hidroalcohólicos y productos específicos para industria alimentaria.',
+    icon: HandPlatter,
+    href: '/productos?cat=Higiene+de+manos',
+  },
+  {
+    titulo: 'Talleres, mantenimiento y automoción',
+    desc: 'Aflojatodo, descarbonizantes, lubricantes PTFE y limpieza de equipos eléctricos.',
+    icon: Wrench,
+    href: '/productos?cat=Talleres%2C+mantenimiento+y+automoci%C3%B3n',
+  },
+  {
+    titulo: 'Hostelería',
+    desc: 'Lavavajillas, abrillantadores, limpiacristales, ambientadores y desincrustantes.',
+    icon: ChefHat,
+    href: '/productos?cat=Hosteler%C3%ADa',
+  },
+  {
+    titulo: 'Construcción y pinturas',
+    desc: 'Selladoras epoxi, revestimientos autonivelantes y aditivos para hormigón.',
+    icon: HardHat,
+    href: '/productos?cat=Construcci%C3%B3n+y+pinturas',
+  },
+  {
+    titulo: 'Detergentes, desengrasantes y biocidas',
+    desc: 'Detergentes clorados y limpieza técnica para industria alimentaria.',
+    icon: ShieldCheck,
+    href: '/productos?cat=Detergentes%2C+desengrasantes+y+biocidas',
+  },
+  {
+    titulo: 'Aditivos e higienizantes especiales',
+    desc: 'Aditivos para aguas de lavado, secantes para fruta y producto oxigenado.',
+    icon: FlaskConical,
+    href: '/productos?cat=Aditivos+e+higienizantes+especiales',
+  },
+];
+
+const sectoresHome = [
+  { icon: Factory, title: 'Industria en general', desc: 'Limpieza técnica, higiene y mantenimiento profesional.' },
+  { icon: ChefHat, title: 'Hostelería y colectividades', desc: 'Lavavajillas, abrillantadores y desincrustantes.' },
+  { icon: PackageSearch, title: 'Industria alimentaria', desc: 'Detergentes clorados, biocidas y aditivos específicos.' },
+  { icon: Wrench, title: 'Talleres y automoción', desc: 'Desengrasantes, lubricantes y desbloqueantes.' },
+  { icon: HardHat, title: 'Construcción y pavimentos', desc: 'Epoxi, selladoras y aditivos para hormigón.' },
+  { icon: Leaf, title: 'Línea ecológica', desc: 'Alternativas con menor impacto para entornos sensibles.' },
+];
 
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: 'Grupo Chemie',
-  description:
-    'Distribuidor de productos químicos y suministros industriales en Almería, especializado en cooperativas agrícolas.',
-  url: 'https://grupochemie.com',
-  telephone: '+34609662482',
-  email: 'info@grupochemie.com',
-  areaServed: 'Almería, España',
+  name: site.name,
+  description: site.description,
+  url: site.url,
+  telephone: site.phone.tel,
+  email: site.email,
+  areaServed: `${site.locality}, España`,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Almería',
-    addressCountry: 'ES',
+    addressLocality: site.locality,
+    addressCountry: site.country,
   },
 };
 ---
 <BaseLayout
-  title="Grupo Chemie · Productos químicos y suministros industriales en Almería"
-  description="Distribuidor de productos químicos, biocidas registrados y suministros industriales para cooperativas agrícolas, industria alimentaria, talleres y hostelería en Almería."
+  title={`${site.name} · ${site.tagline}`}
+  description={site.description}
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
 
   <!-- HERO -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white">
-    <div class="container-tight section grid gap-12 lg:grid-cols-2 lg:items-center">
+  <section class="relative overflow-hidden bg-surface">
+    <!-- Patrón sutil de fondo -->
+    <div class="absolute inset-0 -z-10 opacity-[0.04]" aria-hidden="true">
+      <div class="h-full w-full" style="background-image: radial-gradient(#1D1D1B 1px, transparent 1px); background-size: 24px 24px;"></div>
+    </div>
+    <div class="container-tight section grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-center">
       <div>
-        <span class="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-800 border border-brand-100">
+        <span class="badge-brand">
           <ShieldCheck class="h-3.5 w-3.5" /> Empresa con Registro Oficial de Biocidas
         </span>
-        <h1 class="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">
-          Productos químicos y suministros industriales para <span class="text-brand-800">cooperativas y empresas</span> de Almería.
+        <h1 class="mt-5 text-4xl md:text-5xl lg:text-[56px] font-extrabold tracking-tight text-ink leading-[1.05]">
+          Soluciones químicas profesionales para <span class="text-brand-600">higiene, industria alimentaria, hostelería y mantenimiento</span>.
         </h1>
-        <p class="mt-5 text-lg text-slate-600 max-w-xl">
-          En Grupo Chemie distribuimos biocidas, detergentes industriales, EPIs y consumibles técnicos con asesoramiento profesional y entrega rápida.
+        <p class="mt-6 text-lg text-muted max-w-xl">
+          Catálogo técnico de detergentes, desengrasantes, higienizantes, biocidas, aditivos y productos específicos para uso profesional.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a href="/productos" class="btn-primary">Ver catálogo <ArrowRight class="h-4 w-4" /></a>
-          <a href="/contacto" class="btn-outline">Solicitar presupuesto</a>
+          <a href="/contacto" class="btn-outline">Solicitar información</a>
         </div>
       </div>
 
       <div class="relative">
-        <div class="rounded-2xl bg-white border border-slate-200 shadow-sm p-8">
-          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Registro Oficial</p>
-          <p class="mt-2 text-2xl md:text-3xl font-bold text-slate-900">
-            Nº Biocidas
+        <div class="rounded-2xl bg-surface border border-line p-8 shadow-[0_1px_0_rgba(29,29,27,0.02),0_20px_40px_-20px_rgba(29,29,27,0.15)]">
+          <p class="label-muted">Registro Oficial</p>
+          <p class="mt-2 text-lg font-semibold text-ink">Nº de Biocidas</p>
+          <p class="mt-1 text-3xl md:text-4xl font-black text-brand-600 tracking-tight">
+            {site.registroBiocidas}
           </p>
-          <p class="mt-1 text-3xl md:text-4xl font-black text-brand-800 tracking-tight">
-            12-20/40-06373-HA
+          <p class="mt-4 text-sm text-muted">
+            Autorización oficial para la comercialización y aplicación de productos biocidas de uso profesional.
           </p>
-          <p class="mt-4 text-sm text-slate-600">
-            Autorización oficial que garantiza el cumplimiento normativo en la comercialización y aplicación de productos biocidas de uso profesional.
-          </p>
-          <ul class="mt-5 space-y-2 text-sm text-slate-700">
-            <li class="flex items-center gap-2"><CircleCheck class="h-4 w-4 text-brand-700" /> Asesoramiento técnico especializado</li>
-            <li class="flex items-center gap-2"><CircleCheck class="h-4 w-4 text-brand-700" /> Entrega en Almería y provincia</li>
-            <li class="flex items-center gap-2"><CircleCheck class="h-4 w-4 text-brand-700" /> Fichas técnicas y de seguridad</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- VALORES -->
-  <section class="section border-t border-slate-100">
-    <div class="container-tight">
-      <h2 class="text-2xl md:text-3xl font-bold">Soluciones B2B con respaldo técnico</h2>
-      <p class="mt-2 text-slate-600 max-w-2xl">
-        Trabajamos con cooperativas agrícolas, industria alimentaria, talleres y hostelería. Seleccionamos el producto adecuado y acompañamos en su uso.
-      </p>
-
-      <div class="mt-10 grid gap-6 md:grid-cols-3">
-        <div class="rounded-lg border border-slate-200 p-6">
-          <Beaker class="h-7 w-7 text-brand-700" />
-          <h3 class="mt-3 font-semibold">Catálogo técnico</h3>
-          <p class="mt-1 text-sm text-slate-600">Biocidas registrados, detergencia industrial, EPIs y consumibles.</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 p-6">
-          <Truck class="h-7 w-7 text-brand-700" />
-          <h3 class="mt-3 font-semibold">Logística local</h3>
-          <p class="mt-1 text-sm text-slate-600">Almacén propio en Almería y servicio a cooperativas y empresas del entorno.</p>
-        </div>
-        <div class="rounded-lg border border-slate-200 p-6">
-          <HeartHandshake class="h-7 w-7 text-brand-700" />
-          <h3 class="mt-3 font-semibold">Trato directo</h3>
-          <p class="mt-1 text-sm text-slate-600">Comercial técnico de referencia y condiciones adaptadas a cada cliente.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRODUCTOS DESTACADOS -->
-  {productos.length > 0 && (
-    <section class="section bg-slate-50 border-t border-slate-100">
-      <div class="container-tight">
-        <div class="flex items-end justify-between gap-4 flex-wrap">
-          <div>
-            <h2 class="text-2xl md:text-3xl font-bold">Productos destacados</h2>
-            <p class="mt-2 text-slate-600">Selección representativa del catálogo.</p>
+          <div class="mt-6 border-t border-line pt-5 text-sm">
+            <p class="text-muted">¿Necesitas una solución concreta?</p>
+            <a href="/contacto" class="mt-1 inline-flex items-center gap-1 text-brand-600 font-semibold hover:underline">
+              Habla con el equipo técnico <ArrowRight class="h-3.5 w-3.5" />
+            </a>
           </div>
-          <a href="/productos" class="text-sm font-semibold text-brand-800 hover:underline inline-flex items-center gap-1">
-            Ver todos <ArrowRight class="h-4 w-4" />
-          </a>
-        </div>
-        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {productos.map((p) => <ProductCard product={p} />)}
         </div>
       </div>
-    </section>
-  )}
+    </div>
+  </section>
 
-  <!-- CTA -->
+  <!-- BLOQUE CONFIANZA -->
+  <section class="section border-t border-line bg-surface-soft">
+    <div class="container-tight max-w-4xl text-center">
+      <p class="label-muted">Proveedor técnico</p>
+      <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
+        Proveedor técnico para empresas, industria alimentaria, hostelería y mantenimiento profesional
+      </h2>
+      <p class="mt-5 text-lg text-muted">
+        Grupo Chemie ofrece soluciones para limpieza técnica, higiene profesional, procesos en industria alimentaria, mantenimiento y suministro industrial, con un catálogo adaptado a uso profesional y entornos exigentes.
+      </p>
+    </div>
+  </section>
+
+  <!-- CATÁLOGO POR FAMILIAS -->
   <section class="section">
     <div class="container-tight">
-      <div class="rounded-2xl bg-brand-800 text-white p-8 md:p-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">¿Trabajas en una cooperativa?</h2>
-          <p class="mt-2 text-brand-50/90 max-w-xl">
-            Tenemos una línea específica para cooperativas agrícolas: higiene, desinfección, detergencia CIP y consumibles.
+      <div class="flex items-end justify-between gap-4 flex-wrap">
+        <div class="max-w-2xl">
+          <p class="label-muted">Catálogo</p>
+          <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">Catálogo por familias</h2>
+          <p class="mt-3 text-muted">
+            Accede a las principales líneas de producto y encuentra la solución adecuada según aplicación, sector y tipo de uso.
           </p>
         </div>
-        <div class="flex flex-wrap gap-3">
-          <a href="/cooperativas" class="btn bg-white text-brand-800 hover:bg-brand-50">Ver línea cooperativas</a>
-          <a href="/contacto" class="btn border border-white/30 text-white hover:bg-white/10">Contactar</a>
+        <a href="/productos" class="text-sm font-semibold text-brand-600 hover:underline inline-flex items-center gap-1">
+          Ver catálogo completo <ArrowRight class="h-4 w-4" />
+        </a>
+      </div>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {categoriasHome.map(({ titulo, desc, icon: Icon, href }) => (
+          <a href={href} class="group card-hover p-6 flex flex-col">
+            <Icon class="h-8 w-8 text-brand-500" stroke-width={1.6} />
+            <h3 class="mt-4 font-semibold text-ink group-hover:text-brand-600 transition-colors">{titulo}</h3>
+            <p class="mt-1 text-sm text-muted">{desc}</p>
+            <span class="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-brand-600">
+              Ver productos <ArrowRight class="h-3.5 w-3.5" />
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <!-- Mini stats por gama -->
+      <div class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {categoriasPadre.map((cp) => (
+          <div class="flex items-center gap-3 rounded-lg border border-line bg-surface p-4">
+            <div class="flex h-10 w-10 items-center justify-center rounded-md bg-brand-50 text-brand-600 font-bold">
+              {conteoPadre[cp]}
+            </div>
+            <div>
+              <p class="text-xs text-muted">Gama</p>
+              <p class="text-sm font-semibold text-ink">{cp}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTORES -->
+  <section class="section bg-surface-soft border-t border-line">
+    <div class="container-tight">
+      <div class="max-w-3xl">
+        <p class="label-muted">Sectores</p>
+        <h2 class="mt-2 text-3xl md:text-4xl font-bold text-ink tracking-tight">
+          Sectores a los que damos servicio
+        </h2>
+        <p class="mt-3 text-muted">
+          Trabajamos con industria alimentaria, hostelería, colectividades, mantenimiento, automoción, construcción y entornos industriales que requieren producto técnico y suministro profesional.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {sectoresHome.map(({ icon: Icon, title, desc }) => (
+          <div class="card p-6">
+            <Icon class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+            <h3 class="mt-3 font-semibold text-ink">{title}</h3>
+            <p class="mt-1 text-sm text-muted">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO CTA -->
+  <section class="section">
+    <div class="container-tight">
+      <div class="rounded-2xl bg-ink text-white p-8 md:p-14 grid gap-6 md:grid-cols-[1.2fr_1fr] md:items-center">
+        <div>
+          <p class="text-brand-400 text-xs font-semibold uppercase tracking-wider">Contacto</p>
+          <h2 class="mt-2 text-3xl md:text-4xl font-bold text-white tracking-tight">
+            ¿Necesitas una solución concreta?
+          </h2>
+          <p class="mt-4 text-white/70 max-w-xl">
+            Indícanos tu sector, aplicación o tipo de producto y te orientamos hacia la gama más adecuada.
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 md:justify-end">
+          <a href="/contacto" class="btn bg-brand-500 text-white hover:bg-brand-600">Escribir al equipo</a>
+          <a href={`tel:${site.phone.tel}`} class="btn border border-white/20 text-white hover:bg-white/10">
+            {site.phone.display}
+          </a>
         </div>
       </div>
     </div>

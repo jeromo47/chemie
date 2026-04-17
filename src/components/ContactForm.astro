@@ -1,94 +1,92 @@
 ---
 const endpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
+
+const inputClass =
+  'mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500';
 ---
-<form
-  action={endpoint}
-  method="POST"
-  class="grid gap-4"
->
+<form action={endpoint} method="POST" class="grid gap-4">
   <div class="grid gap-4 sm:grid-cols-2">
     <label class="block">
-      <span class="text-sm font-medium text-slate-700">Nombre *</span>
-      <input
-        type="text"
-        name="nombre"
-        required
-        autocomplete="name"
-        class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-700"
-      />
+      <span class="text-sm font-medium text-ink">Nombre *</span>
+      <input type="text" name="nombre" required autocomplete="name" class={inputClass} />
     </label>
     <label class="block">
-      <span class="text-sm font-medium text-slate-700">Empresa</span>
-      <input
-        type="text"
-        name="empresa"
-        autocomplete="organization"
-        class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-700"
-      />
+      <span class="text-sm font-medium text-ink">Empresa / cooperativa</span>
+      <input type="text" name="empresa" autocomplete="organization" class={inputClass} />
     </label>
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2">
     <label class="block">
-      <span class="text-sm font-medium text-slate-700">Email *</span>
-      <input
-        type="email"
-        name="email"
-        required
-        autocomplete="email"
-        class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-700"
-      />
+      <span class="text-sm font-medium text-ink">Email *</span>
+      <input type="email" name="email" required autocomplete="email" class={inputClass} />
     </label>
     <label class="block">
-      <span class="text-sm font-medium text-slate-700">Teléfono</span>
-      <input
-        type="tel"
-        name="telefono"
-        autocomplete="tel"
-        class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-700"
-      />
+      <span class="text-sm font-medium text-ink">Teléfono</span>
+      <input type="tel" name="telefono" autocomplete="tel" class={inputClass} />
+    </label>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <label class="block">
+      <span class="text-sm font-medium text-ink">Sector</span>
+      <select name="sector" class={inputClass}>
+        <option value="">Selecciona un sector</option>
+        <option>Industria alimentaria</option>
+        <option>Cooperativa / manipulado</option>
+        <option>Hostelería / colectividades</option>
+        <option>Taller / automoción</option>
+        <option>Construcción</option>
+        <option>Mantenimiento industrial</option>
+        <option>Otro</option>
+      </select>
+    </label>
+    <label class="block">
+      <span class="text-sm font-medium text-ink">Tipo de consulta</span>
+      <select name="tipoConsulta" class={inputClass}>
+        <option value="">Selecciona</option>
+        <option>Presupuesto</option>
+        <option>Asesoramiento técnico</option>
+        <option>Ficha técnica / seguridad</option>
+        <option>Suministro continuado</option>
+        <option>Otro</option>
+      </select>
     </label>
   </div>
 
   <label class="block">
-    <span class="text-sm font-medium text-slate-700">Sector</span>
-    <select
-      name="sector"
-      class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-700 bg-white"
-    >
-      <option value="">Selecciona un sector</option>
-      <option>Cooperativa agrícola</option>
-      <option>Industria alimentaria</option>
-      <option>Taller / automoción</option>
-      <option>Hostelería</option>
-      <option>Otro</option>
-    </select>
+    <span class="text-sm font-medium text-ink">Mensaje *</span>
+    <textarea name="mensaje" rows="5" required class={inputClass}></textarea>
   </label>
 
-  <label class="block">
-    <span class="text-sm font-medium text-slate-700">Mensaje *</span>
-    <textarea
-      name="mensaje"
-      rows="5"
+  <label class="flex items-start gap-2 text-sm text-muted">
+    <input
+      type="checkbox"
       required
-      class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-700"
-    ></textarea>
-  </label>
-
-  <label class="flex items-start gap-2 text-sm text-slate-600">
-    <input type="checkbox" required class="mt-1 rounded border-slate-300 text-brand-800 focus:ring-brand-700" />
-    <span>He leído y acepto la <a href="/privacidad" class="text-brand-800 underline">política de privacidad</a>.</span>
+      class="mt-1 rounded border-line text-brand-500 focus:ring-brand-500"
+    />
+    <span>He leído y acepto la <a href="/privacidad" class="text-brand-600 hover:underline">política de privacidad</a>.</span>
   </label>
 
   <!-- Honeypot anti-spam -->
-  <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+  <input
+    type="text"
+    name="_gotcha"
+    tabindex="-1"
+    autocomplete="off"
+    class="hidden"
+    aria-hidden="true"
+  />
+
+  <!-- Redirección tras envío -->
+  <input type="hidden" name="_subject" value="Nuevo contacto desde grupochemie.com" />
 
   <div>
     <button type="submit" class="btn-primary">Enviar mensaje</button>
   </div>
 
   {!endpoint && (
-    <p class="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md p-3">
+    <p class="text-xs text-brand-700 bg-brand-50 border border-brand-200 rounded-md p-3">
       <strong>Aviso dev:</strong> define <code>PUBLIC_FORMSPREE_ENDPOINT</code> en <code>.env</code> para que el formulario envíe datos.
     </p>
   )}

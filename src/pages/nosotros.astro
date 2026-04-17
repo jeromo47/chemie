@@ -1,56 +1,60 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { ShieldCheck, Users, Building2, Target } from '@lucide/astro';
+import { ShieldCheck, Target, Package, Headphones } from '@lucide/astro';
+import { site } from '../config/site';
 ---
 <BaseLayout
-  title="Sobre Grupo Chemie · Distribución química en Almería"
-  description="Conoce a Grupo Chemie: distribuidor de productos químicos, biocidas registrados y suministros industriales con sede en Almería."
+  title={`Sobre ${site.name} · Suministro químico profesional`}
+  description="Grupo Chemie: marca orientada al suministro de productos químicos y soluciones de higiene para clientes profesionales."
 >
-  <section class="section">
-    <div class="container-tight max-w-3xl">
-      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Quiénes somos</p>
-      <h1 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Grupo Chemie</h1>
-      <p class="mt-5 text-lg text-slate-600">
-        Empresa almeriense especializada en distribución de productos químicos y suministros industriales.
-        Damos servicio a cooperativas agrícolas, industria alimentaria, talleres y hostelería, con asesoramiento
-        técnico y cumplimiento normativo en cada referencia.
+  <section class="border-b border-line bg-surface-soft">
+    <div class="container-tight py-16 md:py-24 max-w-3xl">
+      <p class="label-muted">Quiénes somos</p>
+      <h1 class="mt-3 text-4xl md:text-5xl font-extrabold tracking-tight text-ink leading-[1.05]">
+        Suministro químico profesional con enfoque técnico
+      </h1>
+      <p class="mt-6 text-lg text-muted">
+        Grupo Chemie es una marca orientada al suministro de productos químicos y soluciones de higiene para clientes profesionales. Nuestro catálogo cubre limpieza técnica, higiene de manos, hostelería, industria alimentaria, mantenimiento, automoción, construcción y líneas específicas para aplicaciones exigentes.
       </p>
-      <p class="mt-3 text-sm text-slate-500">
-        <em>[Placeholder — sustituir por texto definitivo sobre la historia de la empresa, equipo y ámbito de trabajo.]</em>
+      <p class="mt-4 text-lg text-muted">
+        Trabajamos con una orientación práctica: producto adecuado, aplicación correcta y respuesta ágil para cliente profesional.
       </p>
     </div>
   </section>
 
-  <section class="section bg-slate-50 border-y border-slate-100">
-    <div class="container-tight grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      <div class="rounded-lg border border-slate-200 bg-white p-6">
-        <ShieldCheck class="h-7 w-7 text-brand-700" />
-        <h3 class="mt-3 font-semibold">Biocidas registrados</h3>
-        <p class="mt-1 text-sm text-slate-600">Autorización oficial 12-20/40-06373-HA.</p>
+  <section class="section">
+    <div class="container-tight grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="card p-6">
+        <ShieldCheck class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+        <h3 class="mt-3 font-semibold text-ink">Biocidas registrados</h3>
+        <p class="mt-1 text-sm text-muted">Autorización oficial {site.registroBiocidas}.</p>
       </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-6">
-        <Users class="h-7 w-7 text-brand-700" />
-        <h3 class="mt-3 font-semibold">Trato técnico</h3>
-        <p class="mt-1 text-sm text-slate-600">Comerciales especializados en cada sector.</p>
+      <div class="card p-6">
+        <Package class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+        <h3 class="mt-3 font-semibold text-ink">Catálogo técnico</h3>
+        <p class="mt-1 text-sm text-muted">Detergencia, higiene, mantenimiento y aditivos específicos.</p>
       </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-6">
-        <Building2 class="h-7 w-7 text-brand-700" />
-        <h3 class="mt-3 font-semibold">Sede en Almería</h3>
-        <p class="mt-1 text-sm text-slate-600">Logística local y servicio rápido.</p>
+      <div class="card p-6">
+        <Target class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+        <h3 class="mt-3 font-semibold text-ink">Enfoque profesional</h3>
+        <p class="mt-1 text-sm text-muted">Producto adecuado para cada aplicación y sector.</p>
       </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-6">
-        <Target class="h-7 w-7 text-brand-700" />
-        <h3 class="mt-3 font-semibold">Foco B2B</h3>
-        <p class="mt-1 text-sm text-slate-600">Cooperativas, industria y profesionales.</p>
+      <div class="card p-6">
+        <Headphones class="h-7 w-7 text-brand-500" stroke-width={1.6} />
+        <h3 class="mt-3 font-semibold text-ink">Respuesta ágil</h3>
+        <p class="mt-1 text-sm text-muted">Asesoramiento directo y atención a cliente profesional.</p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section bg-surface-soft border-t border-line">
     <div class="container-tight max-w-3xl">
-      <h2 class="text-2xl md:text-3xl font-bold">Nuestro compromiso</h2>
-      <p class="mt-3 text-slate-600">
-        <em>[Placeholder — misión, valores, compromiso ambiental, normativa REACH/CLP, certificaciones, etc.]</em>
+      <h2 class="text-2xl md:text-3xl font-bold text-ink tracking-tight">Cómo trabajamos</h2>
+      <p class="mt-4 text-muted">
+        Nos apoyamos en tres principios: conocer el uso real del producto, garantizar cumplimiento normativo en aplicaciones sensibles (industria alimentaria, biocidas, pavimentos industriales) y mantener disponibilidad logística continuada para cliente profesional.
+      </p>
+      <p class="mt-3 text-xs text-muted italic">
+        [Sustituir por texto definitivo sobre historia, equipo y certificaciones — placeholder].
       </p>
     </div>
   </section>

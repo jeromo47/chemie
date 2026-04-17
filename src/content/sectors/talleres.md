@@ -1,10 +1,8 @@
 ---
-nombre: "Talleres y automoción"
-descripcion: "Desengrasantes, limpiadores técnicos y consumibles para talleres mecánicos."
+nombre: "Talleres, mantenimiento y automoción"
+descripcion: "Desengrasantes, descarbonizantes, lubricantes, aflojatodo y limpieza de equipos eléctricos."
 icono: "wrench"
-productosRecomendados:
-  - "ejemplo-epi"
-orden: 3
+orden: 4
 ---
 
-Productos técnicos para mantenimiento, limpieza de piezas y EPI.
+Productos técnicos para talleres mecánicos, mantenimiento industrial y automoción: desbloqueantes, lubricantes con PTFE, desengrasantes de motor y carrocería, descarbonizantes.

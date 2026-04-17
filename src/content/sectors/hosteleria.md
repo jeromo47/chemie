@@ -1,10 +1,8 @@
 ---
-nombre: "Hostelería"
-descripcion: "Higiene profesional para restaurantes, hoteles y colectividades."
+nombre: "Hostelería y colectividades"
+descripcion: "Limpieza, lavavajillas, ambientadores y desincrustantes para hostelería, restauración y colectividades."
 icono: "chef-hat"
-productosRecomendados:
-  - "ejemplo-desinfectante"
-orden: 4
+orden: 3
 ---
 
-Detergentes, desinfectantes y consumibles de uso profesional para hostelería.
+Detergentes para lavavajillas en aguas duras, abrillantadores, limpiacristales, ambientadores y desincrustantes para maquinaria automática.

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 90" role="img" aria-label="Grupo Chemie">
+  <!-- Símbolo (aprox temporal del logo) -->
+  <g transform="translate(6,10)" fill="none" stroke="#1D1D1B" stroke-width="3" stroke-linejoin="round">
+    <path d="M6 40 C6 18 28 6 48 10 C64 13 72 24 72 34 L72 44 L6 44 Z"/>
+    <path d="M10 46 L46 46 L22 54 L60 54 L30 62 L70 62" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,18)" fill="#1D1D1B">
+    <g transform="translate(100,0)">
+      <text x="0" y="22" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="20" letter-spacing="1">grup</text>
+      <circle cx="64" cy="14" r="5"/>
+    </g>
+    <text x="100" y="58" font-family="'Inter', Arial, sans-serif" font-weight="900" font-style="italic" font-size="42" letter-spacing="-1">Chemie</text>
+  </g>
+</svg>
